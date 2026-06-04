@@ -1,0 +1,47 @@
+package br.com.walletfy.controller;
+
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import br.com.walletfy.dto.CategoriaCadastroDTO;
+import br.com.walletfy.dto.CategoriaResponseDTO;
+import br.com.walletfy.service.CategoriaService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+
+@RestController
+@RequestMapping("/categoria")
+@RequiredArgsConstructor
+public class CategoriaController {
+
+	private final CategoriaService categoriaService;
+	
+	@PostMapping("/{usuarioId}")
+    public ResponseEntity<CategoriaResponseDTO> cadastrar(@PathVariable Long usuarioId, @Valid @RequestBody CategoriaCadastroDTO dto) {
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(categoriaService.cadastrar(usuarioId, dto));
+    }
+
+    @GetMapping("/listar/{usuarioId}")
+    public ResponseEntity<List<CategoriaResponseDTO>> listar(@PathVariable Long usuarioId) {
+
+        return ResponseEntity.ok(
+                categoriaService.listar(usuarioId));
+    }
+
+    @GetMapping("/listar-ativas/{usuarioId}")
+    public ResponseEntity<List<CategoriaResponseDTO>> listarAtivos(@PathVariable Long usuarioId) {
+
+        return ResponseEntity.ok(
+                categoriaService.listarAtivos(usuarioId));
+    }
+}
