@@ -22,7 +22,7 @@ public class GlobalExceptionHandler {
 	            .mensagem("Erro inesperado. Tente novamente mais tarde.")
 	            .dataHora(LocalDateTime.now())
 	            .build();
-
+	    ex.printStackTrace();
 	    return ResponseEntity
 	            .status(HttpStatus.INTERNAL_SERVER_ERROR)
 	            .body(erro);
