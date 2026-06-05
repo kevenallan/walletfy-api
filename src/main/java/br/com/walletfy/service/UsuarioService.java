@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.walletfy.dto.LoginDTO;
 import br.com.walletfy.dto.LoginResponseDTO;
-import br.com.walletfy.dto.UsuarioCadastroDTO;
+import br.com.walletfy.dto.UsuarioRequestDTO;
 import br.com.walletfy.dto.UsuarioResponseDTO;
 import br.com.walletfy.entity.Usuario;
 import br.com.walletfy.exception.RegraNegocioException;
@@ -18,7 +18,7 @@ public class UsuarioService {
 
 	private final UsuarioRepository usuarioRepository;
 	
-	public UsuarioResponseDTO cadastrar(UsuarioCadastroDTO dto) {
+	public UsuarioResponseDTO cadastrar(UsuarioRequestDTO dto) {
 		if (this.usuarioRepository.existsByEmail(dto.getEmail())) {
 			throw new RegraNegocioException("E-mail já cadastrado");
 		}
@@ -49,4 +49,14 @@ public class UsuarioService {
 	            .build();
 	}
 
+	public Usuario getReference(Long usuarioId) {
+		return this.usuarioRepository.findById(usuarioId).orElseThrow(
+				() -> new RegraNegocioException("Usuario não encontrado"));
+	}
+	
+	public UsuarioResponseDTO buscarPorId(Long usuarioId) {
+		Usuario usuario = this.usuarioRepository.findById(usuarioId).orElseThrow(
+				() -> new RegraNegocioException("Usuario não encontrado"));
+		return UsuarioMapper.toResponseDTO(usuario);
+	}
 }

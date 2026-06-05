@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.walletfy.dto.CategoriaCadastroDTO;
+import br.com.walletfy.dto.CategoriaRequestDTO;
 import br.com.walletfy.dto.CategoriaResponseDTO;
 import br.com.walletfy.service.CategoriaService;
 import jakarta.validation.Valid;
@@ -25,20 +25,20 @@ public class CategoriaController {
 	private final CategoriaService categoriaService;
 	
 	@PostMapping("/{usuarioId}")
-    public ResponseEntity<CategoriaResponseDTO> cadastrar(@PathVariable Long usuarioId, @Valid @RequestBody CategoriaCadastroDTO dto) {
+    public ResponseEntity<CategoriaResponseDTO> cadastrar(@PathVariable Long usuarioId, @Valid @RequestBody CategoriaRequestDTO dto) {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(categoriaService.cadastrar(usuarioId, dto));
     }
 
-    @GetMapping("/listar/{usuarioId}")
+    @GetMapping("/{usuarioId}")
     public ResponseEntity<List<CategoriaResponseDTO>> listar(@PathVariable Long usuarioId) {
 
         return ResponseEntity.ok(
                 categoriaService.listar(usuarioId));
     }
 
-    @GetMapping("/listar-ativas/{usuarioId}")
+    @GetMapping("/{usuarioId}/ativas")
     public ResponseEntity<List<CategoriaResponseDTO>> listarAtivos(@PathVariable Long usuarioId) {
 
         return ResponseEntity.ok(

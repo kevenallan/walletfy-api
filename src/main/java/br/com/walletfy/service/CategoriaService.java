@@ -4,13 +4,12 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import br.com.walletfy.dto.CategoriaCadastroDTO;
+import br.com.walletfy.dto.CategoriaRequestDTO;
 import br.com.walletfy.dto.CategoriaResponseDTO;
 import br.com.walletfy.entity.Categoria;
 import br.com.walletfy.exception.RegraNegocioException;
 import br.com.walletfy.mapper.CategoriaMapper;
 import br.com.walletfy.repository.CategoriaRespository;
-import br.com.walletfy.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -19,14 +18,13 @@ public class CategoriaService {
 
 	private final CategoriaRespository categoriaRepository;
 	
-	private final UsuarioRepository usuarioRepository;
+	private final UsuarioService usuarioService;
 	
 	private final CategoriaMapper categoriaMapper;
 	
-	public CategoriaResponseDTO cadastrar(Long usuarioId, CategoriaCadastroDTO dto) {
+	public CategoriaResponseDTO cadastrar(Long usuarioId, CategoriaRequestDTO dto) {
 		
-		this.usuarioRepository.findById(usuarioId).orElseThrow(
-				() -> new RegraNegocioException("Usuario não Cadastrado"));
+		this.usuarioService.buscarPorId(usuarioId);
 		
 		Categoria categoria = Categoria.builder()
 				.usuarioId(usuarioId)
@@ -57,5 +55,10 @@ public class CategoriaService {
                 .map(categoriaMapper::toResponseDTO)
                 .toList();
     }
+    
+	public Categoria getReference(Long categoriaId) {
+		return this.categoriaRepository.findById(categoriaId).orElseThrow(
+				() -> new RegraNegocioException("Categoria não encontrada"));
+	}
 
 }
