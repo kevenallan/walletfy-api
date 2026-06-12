@@ -1,6 +1,7 @@
 package br.com.walletfy.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,16 +18,17 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
+@CrossOrigin(origins = "http://localhost:4200")
 public class UsuarioController {
 
 	private final UsuarioService usuarioService;
-	
+
 	@PostMapping("/cadastrar")
 	public ResponseEntity<UsuarioResponseDTO> cadastrar(@Valid @RequestBody UsuarioRequestDTO dto) {
 		return ResponseEntity.ok(this.usuarioService.cadastrar(dto));
 	}
 
-	@PostMapping("/login")
+	@PostMapping
 	public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody LoginDTO dto) {
 		return ResponseEntity.ok(this.usuarioService.login(dto));
 	}
