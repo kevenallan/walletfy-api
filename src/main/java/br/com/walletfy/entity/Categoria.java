@@ -30,10 +30,9 @@ public class Categoria {
 
 	private Long usuarioId;
 	private String nome;
-	private String descricao;
 	private String cor;
 	private String icone;
-	private String ativo;
+	private Boolean ativo;
 	@CreationTimestamp
 	private LocalDateTime dataCadastro;
 }

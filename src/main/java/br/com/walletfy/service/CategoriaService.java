@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.walletfy.dto.CategoriaRequestDTO;
 import br.com.walletfy.dto.CategoriaResponseDTO;
+import br.com.walletfy.dto.UsuarioResponseDTO;
 import br.com.walletfy.entity.Categoria;
 import br.com.walletfy.exception.RegraNegocioException;
 import br.com.walletfy.mapper.CategoriaMapper;
@@ -29,10 +30,9 @@ public class CategoriaService {
 		Categoria categoria = Categoria.builder()
 				.usuarioId(usuarioId)
 				.nome(dto.getNome())
-				.descricao(dto.getDescricao())
 				.cor(dto.getCor())
 				.icone(dto.getIcone())
-				.ativo("S")
+				.ativo(true)
 				.build();
 
 		this.categoriaRepository.save(categoria);
@@ -50,10 +50,24 @@ public class CategoriaService {
     public List<CategoriaResponseDTO> listarAtivos(Long usuarioId) {
 
         return categoriaRepository
-                .findByUsuarioIdAndAtivo(usuarioId, "S")
+                .findByUsuarioIdAndAtivo(usuarioId, true)
                 .stream()
                 .map(categoriaMapper::toResponseDTO)
                 .toList();
+    }
+    
+    public CategoriaResponseDTO atualizar(Long usuarioId, CategoriaRequestDTO categoria) {
+    	UsuarioResponseDTO usuario = this.usuarioService.buscarPorId(usuarioId);
+    	Categoria categoriaExistente = this.categoriaRepository.findByUsuarioIdAndId(usuario.getId(), categoria.getId())
+    			.orElseThrow(() -> new RegraNegocioException("Categoria não encontrada"));
+
+        categoriaExistente.setNome(categoria.getNome());
+        categoriaExistente.setCor(categoria.getCor());
+        categoriaExistente.setIcone(categoria.getIcone());
+        categoriaExistente.setAtivo(categoria.getAtivo());
+
+    	Categoria categoriaAtualizada = this.categoriaRepository.save(categoriaExistente);
+    	return categoriaMapper.toResponseDTO(categoriaAtualizada);
     }
     
 	public Categoria getReference(Long categoriaId) {
