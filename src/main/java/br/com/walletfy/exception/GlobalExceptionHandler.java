@@ -2,6 +2,8 @@ package br.com.walletfy.exception;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -14,8 +16,7 @@ import br.com.walletfy.dto.ErrorResponseDTO;
 public class GlobalExceptionHandler {
 
 	@ExceptionHandler(Exception.class)
-	public ResponseEntity<ErrorResponseDTO> tratarErroGenerico(
-	        Exception ex) {
+	public ResponseEntity<ErrorResponseDTO> tratarErroGenerico(Exception ex) {
 
 	    ErrorResponseDTO erro = ErrorResponseDTO.builder()
 	            .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
@@ -30,8 +31,7 @@ public class GlobalExceptionHandler {
 
 	//EXCEPTION DOS @VALIDATION @Valid @NotEmpty
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<ErrorResponseDTO> tratarValidacao(
-	        MethodArgumentNotValidException ex) {
+	public ResponseEntity<ErrorResponseDTO> tratarValidacao(MethodArgumentNotValidException ex) {
 
 	    String mensagem = ex.getBindingResult()
 	            .getFieldError()
@@ -47,8 +47,7 @@ public class GlobalExceptionHandler {
 	}
 
 	 @ExceptionHandler(RegraNegocioException.class)
-	    public ResponseEntity<ErrorResponseDTO> tratarRegraNegocio(
-	            RegraNegocioException ex) {
+	 public ResponseEntity<ErrorResponseDTO> tratarRegraNegocio(RegraNegocioException ex) {
 
 		 ErrorResponseDTO erro = ErrorResponseDTO.builder()
 		            .status(HttpStatus.BAD_REQUEST.value())
@@ -56,5 +55,27 @@ public class GlobalExceptionHandler {
 		            .dataHora(LocalDateTime.now())
 		            .build();
 		 return ResponseEntity.badRequest().body(erro);
-	    }
+	}
+	 
+	 @ExceptionHandler(DataIntegrityViolationException.class)
+	 public ResponseEntity<ErrorResponseDTO> tratarValidacao(DataIntegrityViolationException ex) {
+
+		    String mensagem = "Erro de integridade de dados";
+		    
+		    if (ex.getCause() instanceof ConstraintViolationException constraintEx) {
+		        String mensagemBanco = constraintEx.getSQLException().getMessage();
+		        
+		        if (mensagemBanco.contains("uk_categoria_usuario_nome")) {
+		            mensagem = "Já existe uma categoria com esse nome";
+		        }
+		    }
+		    
+		    ErrorResponseDTO erro = ErrorResponseDTO.builder()
+		            .status(HttpStatus.CONFLICT.value())
+		            .mensagem(mensagem)
+		            .dataHora(LocalDateTime.now())
+		            .build();
+
+		    return ResponseEntity.badRequest().body(erro);
+	}
 }

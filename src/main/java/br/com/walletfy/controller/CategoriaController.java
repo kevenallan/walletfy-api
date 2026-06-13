@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,9 +19,11 @@ import br.com.walletfy.service.CategoriaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+
 @RestController
 @RequestMapping("/categoria")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
 public class CategoriaController {
 
 	private final CategoriaService categoriaService;
@@ -43,5 +47,12 @@ public class CategoriaController {
 
         return ResponseEntity.ok(
                 categoriaService.listarAtivos(usuarioId));
+    }
+    
+    @PutMapping("/{usuarioId}")
+    public ResponseEntity<CategoriaResponseDTO> atualizar(@PathVariable Long usuarioId, @Valid @RequestBody CategoriaRequestDTO categoria) {
+
+        return  ResponseEntity.status(HttpStatus.OK)
+        		.body(this.categoriaService.atualizar(usuarioId, categoria));
     }
 }

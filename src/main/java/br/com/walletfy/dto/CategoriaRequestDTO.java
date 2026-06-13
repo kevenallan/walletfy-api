@@ -8,9 +8,10 @@ import lombok.Setter;
 @Setter
 public class CategoriaRequestDTO {
 
+	private Long id;
 	@NotBlank(message = "Nome é obrigatorio")
 	private String nome;
-	private String descricao;
 	private String cor;
 	private String icone;
+	private Boolean ativo;
 }
