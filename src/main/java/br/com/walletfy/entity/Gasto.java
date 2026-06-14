@@ -45,9 +45,16 @@ public class Gasto {
 	@JoinColumn(name = "forma_pagamento_id")
 	private FormaPagamento formaPagamento;
 	
-	private String descricao;
+	 /**
+     * PENDENTE
+     * PAGO
+     * CANCELADO
+     */
+    @ManyToOne
+    @JoinColumn(name = "status_id", nullable = false)
+    private StatusGasto status;
 	
-	private String observacao;
+	private String descricao;
 	
 	private BigDecimal valor;
 	
@@ -55,14 +62,7 @@ public class Gasto {
 	
 	private LocalDate dataVencimento;
 	
-	 /**
-     * PENDENTE
-     * PAGO
-     * CANCELADO
-     */
-	private String status;
-	
-	private String ativo;
+	private Boolean ativo;
 	
 	@CreationTimestamp
 	private LocalDateTime dataCadastro;

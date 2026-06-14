@@ -34,12 +34,11 @@ public class GastoService {
 				.categoria(categoria)
 				.formaPagamento(formaPagamento)
 				.descricao(dto.getDescricao())
-				.observacao(dto.getObservacao())
 				.valor(dto.getValor())
 				.dataGasto(dto.getDataGasto())
 				.dataVencimento(dto.getDataVencimento())
-				.ativo("S")
-				.status("PENDENTE")
+				.ativo(true)
+				.status(dto.getStatus())
 				.build();
 
 		gasto = this.gastoRepository.save(gasto);

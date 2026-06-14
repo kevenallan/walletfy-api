@@ -3,6 +3,7 @@ package br.com.walletfy.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import br.com.walletfy.entity.StatusGasto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -31,5 +32,5 @@ public class GastoRequestDTO {
 	
 	private LocalDate dataVencimento;
 	
-	private String status;
+	private StatusGasto status;
 }
