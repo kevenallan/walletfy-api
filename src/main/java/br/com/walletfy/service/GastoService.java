@@ -54,4 +54,10 @@ public class GastoService {
 		.map(gastoMapper::toResponseDTO)
 		.toList();
 	}
+	
+	public GastoResponseDTO detalhar(Long gastoId, Long usuarioId) {
+		this.usuarioService.buscarPorId(usuarioId);
+		
+		return gastoMapper.toResponseDTO(this.gastoRepository.findByIdAndUsuarioId(gastoId, usuarioId).get());
+	}
 }
