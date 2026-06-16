@@ -9,6 +9,7 @@ import br.com.walletfy.dto.GastoResponseDTO;
 import br.com.walletfy.entity.Categoria;
 import br.com.walletfy.entity.FormaPagamento;
 import br.com.walletfy.entity.Gasto;
+import br.com.walletfy.entity.StatusGasto;
 import br.com.walletfy.entity.Usuario;
 import br.com.walletfy.mapper.GastoMapper;
 import br.com.walletfy.repository.GastoRepository;
@@ -23,11 +24,13 @@ public class GastoService {
 	private final UsuarioService usuarioService;
 	private final CategoriaService categoriaService;
 	private final FormaPagamentoService formaPagamentoService;
+	private final StatusGastoService statusGastoService;
 	
 	public GastoResponseDTO cadastrar(Long usuarioId, GastoRequestDTO dto) {
 		Usuario usuario = this.usuarioService.getReference(usuarioId);
 		Categoria categoria = this.categoriaService.getReference(dto.getCategoriaId());
 		FormaPagamento formaPagamento = this.formaPagamentoService.getReference(dto.getFormaPagamentoId());
+		StatusGasto statusGasto = this.statusGastoService.getReference(dto.getStatusId());
 		
 		Gasto gasto =  Gasto.builder()
 				.usuario(usuario)
@@ -38,7 +41,7 @@ public class GastoService {
 				.dataGasto(dto.getDataGasto())
 				.dataVencimento(dto.getDataVencimento())
 				.ativo(true)
-				.status(dto.getStatus())
+				.status(statusGasto)
 				.build();
 
 		gasto = this.gastoRepository.save(gasto);
