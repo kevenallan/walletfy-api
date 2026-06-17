@@ -32,4 +32,6 @@ public class GastoRequestDTO {
 	
 	private LocalDate dataVencimento;
 	
+	private Long id;
+	
 }

@@ -11,6 +11,7 @@ import br.com.walletfy.entity.FormaPagamento;
 import br.com.walletfy.entity.Gasto;
 import br.com.walletfy.entity.StatusGasto;
 import br.com.walletfy.entity.Usuario;
+import br.com.walletfy.exception.RegraNegocioException;
 import br.com.walletfy.mapper.GastoMapper;
 import br.com.walletfy.repository.GastoRepository;
 import lombok.RequiredArgsConstructor;
@@ -62,5 +63,30 @@ public class GastoService {
 		this.usuarioService.buscarPorId(usuarioId);
 		
 		return gastoMapper.toResponseDTO(this.gastoRepository.findByIdAndUsuarioId(gastoId, usuarioId).get());
+	}
+	
+	public GastoResponseDTO atualizar(Long usuarioId, GastoRequestDTO dto) {
+		Gasto gasto = this.gastoRepository.findById(dto.getId()).orElseThrow(() -> new RegraNegocioException("Gasto não encontrado"));
+		
+		Usuario usuario = this.usuarioService.getReference(usuarioId);
+		Categoria categoria = this.categoriaService.getReference(dto.getCategoriaId());
+		FormaPagamento formaPagamento = this.formaPagamentoService.getReference(dto.getFormaPagamentoId());
+		StatusGasto statusGasto = this.statusGastoService.getReference(dto.getStatusId());
+		
+		 gasto =  Gasto.builder()
+				.usuario(usuario)
+				.categoria(categoria)
+				.formaPagamento(formaPagamento)
+				.descricao(dto.getDescricao())
+				.valor(dto.getValor())
+				.dataGasto(dto.getDataGasto())
+				.dataVencimento(dto.getDataVencimento())
+				.ativo(true)
+				.status(statusGasto)
+				.build();
+
+		gasto = this.gastoRepository.save(gasto);
+		
+		return gastoMapper.toResponseDTO(gasto);
 	}
 }
