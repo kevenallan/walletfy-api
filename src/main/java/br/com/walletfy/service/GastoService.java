@@ -67,26 +67,35 @@ public class GastoService {
 	
 	public GastoResponseDTO atualizar(Long usuarioId, GastoRequestDTO dto) {
 		Gasto gasto = this.gastoRepository.findById(dto.getId()).orElseThrow(() -> new RegraNegocioException("Gasto não encontrado"));
-		
 		Usuario usuario = this.usuarioService.getReference(usuarioId);
+		if (gasto.getUsuario().getId() != usuario.getId()) {
+			new RegraNegocioException("Esse gasto não pertence a esse usuario");
+		}
+
 		Categoria categoria = this.categoriaService.getReference(dto.getCategoriaId());
 		FormaPagamento formaPagamento = this.formaPagamentoService.getReference(dto.getFormaPagamentoId());
 		StatusGasto statusGasto = this.statusGastoService.getReference(dto.getStatusId());
 		
-		 gasto =  Gasto.builder()
-				.usuario(usuario)
-				.categoria(categoria)
-				.formaPagamento(formaPagamento)
-				.descricao(dto.getDescricao())
-				.valor(dto.getValor())
-				.dataGasto(dto.getDataGasto())
-				.dataVencimento(dto.getDataVencimento())
-				.ativo(true)
-				.status(statusGasto)
-				.build();
+		 gasto.setCategoria(categoria);
+		 gasto.setFormaPagamento(formaPagamento);
+		 gasto.setDescricao(dto.getDescricao());
+		 gasto.setValor(dto.getValor());
+		 gasto.setDataGasto(dto.getDataGasto());
+		 gasto.setDataVencimento(dto.getDataVencimento());
+//		 gasto.setAtivo(true);
+		 gasto.setStatus(statusGasto);
 
 		gasto = this.gastoRepository.save(gasto);
 		
 		return gastoMapper.toResponseDTO(gasto);
+	}
+	
+	public void deletar(Long usuarioId, Long gastoId) {
+		Gasto gasto = this.gastoRepository.findById(gastoId).orElseThrow(() -> new RegraNegocioException("Gasto não encontrado"));
+		Usuario usuario = this.usuarioService.getReference(usuarioId);
+		if (gasto.getUsuario().getId() != usuario.getId()) {
+			new RegraNegocioException("Esse gasto não pertence a esse usuario");
+		}
+		this.gastoRepository.deleteById(gasto.getId());
 	}
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,17 +36,13 @@ public class GastoController {
 	}
 	
 	@GetMapping("/{usuarioId}")
-	public ResponseEntity<List<GastoResponseDTO>>
-	listar(@PathVariable Long usuarioId) {
-
+	public ResponseEntity<List<GastoResponseDTO>> listar(@PathVariable Long usuarioId) {
 	    return ResponseEntity.ok(
 	            this.gastoService.listar(usuarioId));
 	}
 	
 	@GetMapping
-	public ResponseEntity<GastoResponseDTO>
-	detalhar(@RequestParam Long gastoId, @RequestParam Long usuarioId) {
-
+	public ResponseEntity<GastoResponseDTO> detalhar(@RequestParam Long gastoId, @RequestParam Long usuarioId) {
 	    return ResponseEntity.ok(
 	            this.gastoService.detalhar(gastoId, usuarioId));
 	}
@@ -55,5 +52,10 @@ public class GastoController {
 		return ResponseEntity.ok(
 				this.gastoService.atualizar(usuarioId, dto));
 	}
-
+	
+	@DeleteMapping("/{usuarioId}/{gastoId}")
+	public ResponseEntity<Void> deletar(@PathVariable Long usuarioId, @PathVariable Long gastoId) {
+		this.gastoService.deletar(usuarioId, gastoId);
+		return ResponseEntity.noContent().build();
+	}
 }
