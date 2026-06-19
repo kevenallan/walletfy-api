@@ -1,5 +1,6 @@
 package br.com.walletfy.repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,4 +15,6 @@ public interface GastoRepository extends JpaRepository<Gasto, Long>{
 	List<Gasto> findByUsuarioId(Long usuarioId);
 	
 	Optional<Gasto> findByIdAndUsuarioId(Long gastoId, Long usuarioId);
+
+	List<Gasto> findByUsuarioIdAndDataGastoBetween(Long usuarioId, LocalDate dataInicio, LocalDate dataFim);
 }

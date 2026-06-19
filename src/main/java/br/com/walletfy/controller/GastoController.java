@@ -1,5 +1,6 @@
 package br.com.walletfy.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -36,9 +37,9 @@ public class GastoController {
 	}
 	
 	@GetMapping("/{usuarioId}")
-	public ResponseEntity<List<GastoResponseDTO>> listar(@PathVariable Long usuarioId) {
+	public ResponseEntity<List<GastoResponseDTO>> listar(@PathVariable Long usuarioId, @RequestParam LocalDate dataInicio, @RequestParam LocalDate dataFim) {
 	    return ResponseEntity.ok(
-	            this.gastoService.listar(usuarioId));
+	            this.gastoService.listar(usuarioId, dataInicio, dataFim));
 	}
 	
 	@GetMapping
@@ -58,4 +59,5 @@ public class GastoController {
 		this.gastoService.deletar(usuarioId, gastoId);
 		return ResponseEntity.noContent().build();
 	}
+
 }

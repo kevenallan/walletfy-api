@@ -1,5 +1,6 @@
 package br.com.walletfy.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -50,10 +51,10 @@ public class GastoService {
 		return gastoMapper.toResponseDTO(gasto);
 	}
 	
-	public List<GastoResponseDTO> listar(Long usuarioId) {
+	public List<GastoResponseDTO> listar(Long usuarioId, LocalDate dataInicio, LocalDate dataFim) {
 		this.usuarioService.buscarPorId(usuarioId);
 
-		return this.gastoRepository.findByUsuarioId(usuarioId)
+		return this.gastoRepository.findByUsuarioIdAndDataGastoBetween(usuarioId, dataInicio, dataFim)
 		.stream()
 		.map(gastoMapper::toResponseDTO)
 		.toList();
