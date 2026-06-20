@@ -16,7 +16,7 @@ public class GastoResumoResponseDTO {
 	BigDecimal receita;
 	BigDecimal despesas;
 	BigDecimal saldo;
-	Integer pendentes;
+	Long pendentes;
 	BigDecimal variacaoReceita;
 	BigDecimal variacaoDespesas;
 	BigDecimal variacaoSaldo;

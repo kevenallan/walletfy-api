@@ -50,8 +50,8 @@ public class GastoController {
 	}
 	
 	@GetMapping("/resumo")
-    public List<GastoResumoResponseDTO> resumo(@RequestParam Long usuarioId) {
-        return gastoService.gerarResumo(usuarioId);
+    public ResponseEntity<List<GastoResumoResponseDTO>> resumo(@RequestParam Long usuarioId) {
+        return ResponseEntity.ok(gastoService.gerarResumo(usuarioId));
     }
 	
 	@PutMapping("/{usuarioId}")
