@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.walletfy.dto.GastoRequestDTO;
 import br.com.walletfy.dto.GastoResponseDTO;
+import br.com.walletfy.dto.GastoResumoResponseDTO;
 import br.com.walletfy.service.GastoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +48,11 @@ public class GastoController {
 	    return ResponseEntity.ok(
 	            this.gastoService.detalhar(gastoId, usuarioId));
 	}
+	
+	@GetMapping("/resumo")
+    public List<GastoResumoResponseDTO> resumo(@RequestParam Long usuarioId) {
+        return gastoService.gerarResumo(usuarioId);
+    }
 	
 	@PutMapping("/{usuarioId}")
 	public ResponseEntity<GastoResponseDTO> atualizar(@PathVariable Long usuarioId, @Valid @RequestBody GastoRequestDTO dto) {

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.walletfy.dto.GastoRequestDTO;
 import br.com.walletfy.dto.GastoResponseDTO;
+import br.com.walletfy.dto.GastoResumoResponseDTO;
 import br.com.walletfy.entity.Categoria;
 import br.com.walletfy.entity.FormaPagamento;
 import br.com.walletfy.entity.Gasto;
@@ -64,6 +65,12 @@ public class GastoService {
 		this.usuarioService.buscarPorId(usuarioId);
 		
 		return gastoMapper.toResponseDTO(this.gastoRepository.findByIdAndUsuarioId(gastoId, usuarioId).get());
+	}
+	
+	public List<GastoResumoResponseDTO> gerarResumo(Long usuarioId) {
+		this.usuarioService.buscarPorId(usuarioId);
+		
+		return this.gastoRepository.getResumo(usuarioId).get();
 	}
 	
 	public GastoResponseDTO atualizar(Long usuarioId, GastoRequestDTO dto) {
