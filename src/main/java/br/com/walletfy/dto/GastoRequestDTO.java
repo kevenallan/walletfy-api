@@ -17,11 +17,12 @@ public class GastoRequestDTO {
 	
 	@NotNull
 	private Long formaPagamentoId;
-	
+
+	@NotNull
+	private Long statusId;
+
 	@NotBlank
 	private String descricao;
-	
-	private String observacao;
 	
 	@NotNull
 	private BigDecimal valor;
@@ -31,5 +32,6 @@ public class GastoRequestDTO {
 	
 	private LocalDate dataVencimento;
 	
-	private String status;
+	private Long id;
+	
 }

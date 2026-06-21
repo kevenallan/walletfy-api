@@ -5,6 +5,7 @@ import java.time.LocalDate;
 
 import br.com.walletfy.entity.Categoria;
 import br.com.walletfy.entity.FormaPagamento;
+import br.com.walletfy.entity.StatusGasto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,9 +19,9 @@ public class GastoResponseDTO {
 	
 	private FormaPagamento formaPagamento;
 	
+	private StatusGasto status;
+
 	private String descricao;
-	
-	private String observacao;
 	
 	private BigDecimal valor;
 	
@@ -28,6 +29,5 @@ public class GastoResponseDTO {
 	
 	private LocalDate dataVencimento;
 	
-	private String status;
 
 }
