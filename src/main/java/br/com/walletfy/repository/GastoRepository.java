@@ -23,35 +23,37 @@ public interface GastoRepository extends JpaRepository<Gasto, Long>{
 	
 	@Query(value = """
 		    WITH resumo AS (
-		        SELECT
-		            TO_CHAR(data_gasto, 'YYYY-MM') AS mes,
-		            1621.00 AS receita,
-		            SUM(g.valor) AS despesas,
-		            (1621.00 - SUM(g.valor)) AS saldo,
-		            COUNT(CASE WHEN g.status_id != 1 THEN 1 END) AS pendentes
-		        FROM gasto g
-		        WHERE g.usuario_id = :usuarioId
-		          AND TO_CHAR(g.data_gasto, 'YYYY-MM') >= TO_CHAR(CURRENT_DATE - INTERVAL '5 months', 'YYYY-MM')
-		          AND TO_CHAR(g.data_gasto, 'YYYY-MM') <= TO_CHAR(CURRENT_DATE, 'YYYY-MM')
-		        GROUP BY TO_CHAR(g.data_gasto, 'YYYY-MM')
-		    )
-		    SELECT
-		        mes AS mes,
-		        receita AS receita,
-		        despesas AS despesas,
-		        saldo AS saldo,
-		        pendentes AS pendentes,
-		        ROUND(
-		            ((receita - LAG(receita) OVER (ORDER BY mes)) / NULLIF(LAG(receita) OVER (ORDER BY mes), 0)) * 100,
-		        1) AS variacaoReceita,
-		        ROUND(
-		            ((despesas - LAG(despesas) OVER (ORDER BY mes)) / NULLIF(LAG(despesas) OVER (ORDER BY mes), 0)) * 100,
-		        1) AS variacaoDespesas,
-		        ROUND(
-		            ((saldo - LAG(saldo) OVER (ORDER BY mes)) / NULLIF(LAG(saldo) OVER (ORDER BY mes), 0)) * 100,
-		        1) AS variacaoSaldo
-		    FROM resumo
-		    ORDER BY mes
+			    SELECT
+			        TO_CHAR(data_gasto, 'YYYY-MM') AS mes,
+			        1621.00 AS receita,
+			        SUM(g.valor) AS despesas,
+			        (1621.00 - SUM(g.valor)) AS saldo,
+			        COUNT(CASE WHEN status_id != 1 THEN 1 END) AS pendentes,
+			        SUM(CASE WHEN status_id != 1 THEN g.valor ELSE 0 END) AS valor_pendente
+			    FROM gasto g
+			    WHERE g.usuario_id = 1
+			    AND TO_CHAR(data_gasto, 'YYYY-MM') >= TO_CHAR(CURRENT_DATE - INTERVAL '5 months', 'YYYY-MM')
+			    AND TO_CHAR(data_gasto, 'YYYY-MM') <= TO_CHAR(CURRENT_DATE, 'YYYY-MM')
+			    GROUP BY TO_CHAR(data_gasto, 'YYYY-MM')
+			)
+			SELECT
+			    mes,
+			    receita,
+			    despesas,
+			    saldo,
+			    pendentes,
+			    valor_pendente,
+			    ROUND(
+			        ((receita - LAG(receita) OVER (ORDER BY mes)) / NULLIF(LAG(receita) OVER (ORDER BY mes), 0)) * 100,
+			    1) AS variacao_receita,
+			    ROUND(
+			        ((despesas - LAG(despesas) OVER (ORDER BY mes)) / NULLIF(LAG(despesas) OVER (ORDER BY mes), 0)) * 100,
+			    1) AS variacao_despesas,
+			    ROUND(
+			        ((saldo - LAG(saldo) OVER (ORDER BY mes)) / NULLIF(LAG(saldo) OVER (ORDER BY mes), 0)) * 100,
+			    1) AS variacao_saldo
+			FROM resumo
+			ORDER BY mes;
 		    """, nativeQuery = true)
 		Optional<List<GastoResumoResponseDTO>> getResumo(@Param("usuarioId") Long usuarioId);
 }
