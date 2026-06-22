@@ -8,6 +8,7 @@ import br.com.walletfy.dto.CategoriaRequestDTO;
 import br.com.walletfy.dto.CategoriaResponseDTO;
 import br.com.walletfy.dto.UsuarioResponseDTO;
 import br.com.walletfy.entity.Categoria;
+import br.com.walletfy.enums.TipoCategoria;
 import br.com.walletfy.exception.RegraNegocioException;
 import br.com.walletfy.mapper.CategoriaMapper;
 import br.com.walletfy.repository.CategoriaRespository;
@@ -39,18 +40,20 @@ public class CategoriaService {
 		return categoriaMapper.toResponseDTO(categoria);
 	}
 	
-	public List<CategoriaResponseDTO> listar(Long usuarioId) {
-
-	        return this.categoriaRepository.findByUsuarioId(usuarioId)
-	                .stream()
-	                .map(categoriaMapper::toResponseDTO)
-	                .toList();
+	public List<CategoriaResponseDTO> listar(Long usuarioId, TipoCategoria tipo) {
+		this.usuarioService.buscarPorId(usuarioId);
+		
+        return this.categoriaRepository.findByUsuarioIdAndTipo(usuarioId, tipo)
+                .stream()
+                .map(categoriaMapper::toResponseDTO)
+                .toList();
 	}
+	
 
-    public List<CategoriaResponseDTO> listarAtivos(Long usuarioId) {
+    public List<CategoriaResponseDTO> listarAtivos(Long usuarioId, TipoCategoria tipo) {
 
         return categoriaRepository
-                .findByUsuarioIdAndAtivo(usuarioId, true)
+                .findByUsuarioIdAndTipoAndAtivo(usuarioId, tipo, true)
                 .stream()
                 .map(categoriaMapper::toResponseDTO)
                 .toList();
