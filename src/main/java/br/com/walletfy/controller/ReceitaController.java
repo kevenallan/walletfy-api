@@ -41,6 +41,12 @@ public class ReceitaController {
 		return ResponseEntity.ok(this.receitaService.listar(usuarioId, dataInicio, dataFim));
 	}
 	
+	@GetMapping
+	public ResponseEntity<ReceitaResponseDTO> detalhar(@RequestParam Long receitaId, @RequestParam Long usuarioId) {
+	    return ResponseEntity.ok(
+	            this.receitaService.detalhar(receitaId, usuarioId));
+	}
+
 	@PutMapping("/{usuarioId}")
 	public ResponseEntity<ReceitaResponseDTO> atualizar(@PathVariable Long usuarioId, @Valid @RequestBody ReceitaRequestDTO dto) {
 		return ResponseEntity.ok(this.receitaService.atualizar(usuarioId, dto));

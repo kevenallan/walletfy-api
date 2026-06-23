@@ -57,6 +57,12 @@ public class ReceitaService {
 				.map(r -> this.receitaMapper.toResponseDTO(r)).toList();
 	}
 	
+	public ReceitaResponseDTO detalhar(Long receitaId, Long usuarioId) {
+		this.usuarioService.buscarPorId(usuarioId);
+		
+		return receitaMapper.toResponseDTO(this.receitaRepository.findByIdAndUsuarioId(receitaId, usuarioId).get());
+	}
+	
 	public ReceitaResponseDTO atualizar(Long usuarioId, ReceitaRequestDTO dto) {
 		if(dto.getId() == null) {
 			throw new RegraNegocioException("Receita inválida");
