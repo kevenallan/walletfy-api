@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 
 import br.com.walletfy.dto.CategoriaRequestDTO;
 import br.com.walletfy.dto.CategoriaResponseDTO;
-import br.com.walletfy.dto.UsuarioResponseDTO;
 import br.com.walletfy.entity.Categoria;
+import br.com.walletfy.entity.Usuario;
 import br.com.walletfy.exception.RegraNegocioException;
 import br.com.walletfy.mapper.CategoriaMapper;
 import br.com.walletfy.repository.CategoriaRespository;
@@ -57,7 +57,7 @@ public class CategoriaService {
     }
     
     public CategoriaResponseDTO atualizar(Long usuarioId, CategoriaRequestDTO categoria) {
-    	UsuarioResponseDTO usuario = this.usuarioService.buscarPorId(usuarioId);
+    	Usuario usuario = this.usuarioService.getReference(usuarioId);
     	Categoria categoriaExistente = this.categoriaRepository.findByUsuarioIdAndId(usuario.getId(), categoria.getId())
     			.orElseThrow(() -> new RegraNegocioException("Categoria não encontrada"));
 
