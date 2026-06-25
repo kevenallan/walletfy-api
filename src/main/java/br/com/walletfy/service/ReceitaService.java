@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.walletfy.dto.ReceitaRequestDTO;
 import br.com.walletfy.dto.ReceitaResponseDTO;
+import br.com.walletfy.dto.ReceitaResumoResponseDTO;
 import br.com.walletfy.entity.Categoria;
 import br.com.walletfy.entity.FormaPagamento;
 import br.com.walletfy.entity.Receita;
@@ -93,6 +94,12 @@ public class ReceitaService {
 		Receita receita = this.receitaRepository.findByIdAndUsuarioId(receitaId, usuario.getId()).orElseThrow(() -> new RegraNegocioException("Receita não encontrada"));
 		
 		this.receitaRepository.delete(receita);
+	}
+
+	public List<ReceitaResumoResponseDTO> gerarResumo(Long usuarioId) {
+		this.usuarioService.buscarPorId(usuarioId);
+		
+		return this.receitaRepository.getResumo(usuarioId).get();
 	}
 
 }

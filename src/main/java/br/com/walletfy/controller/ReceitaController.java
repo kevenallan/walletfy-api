@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.walletfy.dto.ReceitaRequestDTO;
 import br.com.walletfy.dto.ReceitaResponseDTO;
+import br.com.walletfy.dto.ReceitaResumoResponseDTO;
 import br.com.walletfy.service.ReceitaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -57,5 +58,10 @@ public class ReceitaController {
 		this.receitaService.deletar(usuarioId, receitaId);
 		return ResponseEntity.noContent().build();
 	}
+	
+	@GetMapping("/resumo")
+    public ResponseEntity<List<ReceitaResumoResponseDTO>> resumo(@RequestParam Long usuarioId) {
+        return ResponseEntity.ok(this.receitaService.gerarResumo(usuarioId));
+    }
 
 }
