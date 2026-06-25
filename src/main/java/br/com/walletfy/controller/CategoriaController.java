@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.walletfy.dto.CategoriaRequestDTO;
 import br.com.walletfy.dto.CategoriaResponseDTO;
+import br.com.walletfy.enums.TipoCategoria;
 import br.com.walletfy.service.CategoriaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -36,17 +38,17 @@ public class CategoriaController {
     }
 
     @GetMapping("/{usuarioId}")
-    public ResponseEntity<List<CategoriaResponseDTO>> listar(@PathVariable Long usuarioId) {
+    public ResponseEntity<List<CategoriaResponseDTO>> listar(@PathVariable Long usuarioId, @RequestParam(required = true) TipoCategoria tipo) {
 
         return ResponseEntity.ok(
-                categoriaService.listar(usuarioId));
+                categoriaService.listar(usuarioId, tipo));
     }
 
     @GetMapping("/{usuarioId}/ativas")
-    public ResponseEntity<List<CategoriaResponseDTO>> listarAtivos(@PathVariable Long usuarioId) {
+    public ResponseEntity<List<CategoriaResponseDTO>> listarAtivos(@PathVariable Long usuarioId, @RequestParam(required = true) TipoCategoria tipo) {
 
         return ResponseEntity.ok(
-                categoriaService.listarAtivos(usuarioId));
+                categoriaService.listarAtivos(usuarioId, tipo));
     }
     
     @PutMapping("/{usuarioId}")

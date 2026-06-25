@@ -4,7 +4,10 @@ import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import br.com.walletfy.enums.TipoCategoria;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,6 +33,8 @@ public class Categoria {
 
 	private Long usuarioId;
 	private String nome;
+	@Enumerated(EnumType.STRING)
+	private TipoCategoria tipo;
 	private String cor;
 	private String icone;
 	private Boolean ativo;

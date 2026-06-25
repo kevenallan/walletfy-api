@@ -7,12 +7,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import br.com.walletfy.entity.Categoria;
+import br.com.walletfy.enums.TipoCategoria;
 
 @Repository
 public interface CategoriaRespository extends JpaRepository<Categoria, Long> {
 
-	List<Categoria> findByUsuarioId(Long usuarioId);
-	List<Categoria> findByUsuarioIdAndAtivo(Long usuarioId, Boolean ativo);
+	List<Categoria> findByUsuarioIdAndTipoAndAtivo(Long usuarioId, TipoCategoria tipo, Boolean ativo);
 	Optional<Categoria> findByUsuarioIdAndId(Long usuarioId, Long categoriaId);
 	boolean existsByUsuarioIdAndNome(Long usuarioId, String nome);
+	List<Categoria> findByUsuarioIdAndTipo(Long usuarioId, TipoCategoria tipo);
 }

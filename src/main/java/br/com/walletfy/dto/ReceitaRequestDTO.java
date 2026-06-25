@@ -3,15 +3,12 @@ package br.com.walletfy.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
-public class GastoRequestDTO {
-
+@Data
+public class ReceitaRequestDTO {
+	
 	private Long id;
 
 	@NotNull
@@ -19,20 +16,22 @@ public class GastoRequestDTO {
 	
 	@NotNull
 	private Long formaPagamentoId;
-
+	
 	@NotNull
 	private Long statusId;
-
-	@NotBlank
+	
+	@NotNull
 	private String descricao;
 	
 	@NotNull
 	private BigDecimal valor;
 	
 	@NotNull
-	private LocalDate dataGasto;
+	private LocalDate dataReceita;
 	
-	private LocalDate dataVencimento;
+	private Boolean recorrente;
 	
-	
+//	@NotNull
+	private Boolean ativo;
+
 }
