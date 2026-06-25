@@ -12,9 +12,7 @@ public class UsuarioMapper {
 	        }
 
 	        return AuthResponseDTO.builder()
-	                .id(usuario.getId())
 	                .nome(usuario.getNome())
-	                .email(usuario.getEmail())
 	                .build();
 	    }
 	 

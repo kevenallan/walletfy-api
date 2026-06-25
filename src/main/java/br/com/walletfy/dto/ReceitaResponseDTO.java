@@ -24,7 +24,5 @@ public class ReceitaResponseDTO {
 	
 	private LocalDate dataReceita;
 	
-	private Boolean recorrente;
-	
 	private Boolean ativo;
 }

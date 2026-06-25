@@ -1,12 +1,10 @@
 package br.com.walletfy.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
-public class LoginDTO {
+@Data
+public class LoginRequestDTO {
 
 	@NotBlank(message = "Email é obrigatório")
 	private String email;
