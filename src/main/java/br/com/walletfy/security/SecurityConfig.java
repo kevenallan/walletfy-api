@@ -34,7 +34,7 @@ public class SecurityConfig {
     private List<String> allowedOrigins;
     
     @Bean
-   SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session

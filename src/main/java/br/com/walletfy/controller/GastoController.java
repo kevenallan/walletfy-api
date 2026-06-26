@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.walletfy.dto.GastoRequestDTO;
 import br.com.walletfy.dto.GastoResponseDTO;
 import br.com.walletfy.dto.GastoResumoResponseDTO;
+import br.com.walletfy.security.SecurityUtils;
 import br.com.walletfy.service.GastoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,43 +26,46 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/gasto")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:4200")
 public class GastoController {
 
 	private final GastoService gastoService;
 	
-	@PostMapping("/{usuarioId}")
-	public ResponseEntity<GastoResponseDTO> cadastrar(@PathVariable Long usuarioId, @Valid @RequestBody GastoRequestDTO dto) {
-		return ResponseEntity.status(HttpStatus.CREATED)
-				.body(this.gastoService.cadastrar(usuarioId, dto));
+	private Long usuarioId() {
+	    return SecurityUtils.getUsuarioIdAutenticado();
 	}
 	
-	@GetMapping("/{usuarioId}")
-	public ResponseEntity<List<GastoResponseDTO>> listar(@PathVariable Long usuarioId, @RequestParam LocalDate dataInicio, @RequestParam LocalDate dataFim) {
-	    return ResponseEntity.ok(
-	            this.gastoService.listar(usuarioId, dataInicio, dataFim));
+	@PostMapping
+	public ResponseEntity<GastoResponseDTO> cadastrar(@Valid @RequestBody GastoRequestDTO dto) {
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(this.gastoService.cadastrar(this.usuarioId(), dto));
 	}
 	
 	@GetMapping
-	public ResponseEntity<GastoResponseDTO> detalhar(@RequestParam Long gastoId, @RequestParam Long usuarioId) {
+	public ResponseEntity<List<GastoResponseDTO>> listar(@RequestParam LocalDate dataInicio, @RequestParam LocalDate dataFim) {
 	    return ResponseEntity.ok(
-	            this.gastoService.detalhar(gastoId, usuarioId));
+	            this.gastoService.listar(this.usuarioId(), dataInicio, dataFim));
+	}
+	
+	@GetMapping("/{gastoId}")
+	public ResponseEntity<GastoResponseDTO> detalhar(@PathVariable Long gastoId) {
+	    return ResponseEntity.ok(
+	            this.gastoService.detalhar(gastoId, this.usuarioId()));
 	}
 	
 	@GetMapping("/resumo")
-    public ResponseEntity<List<GastoResumoResponseDTO>> resumo(@RequestParam Long usuarioId) {
-        return ResponseEntity.ok(gastoService.gerarResumo(usuarioId));
+    public ResponseEntity<List<GastoResumoResponseDTO>> resumo() {
+        return ResponseEntity.ok(gastoService.gerarResumo(this.usuarioId()));
     }
 	
-	@PutMapping("/{usuarioId}")
-	public ResponseEntity<GastoResponseDTO> atualizar(@PathVariable Long usuarioId, @Valid @RequestBody GastoRequestDTO dto) {
+	@PutMapping
+	public ResponseEntity<GastoResponseDTO> atualizar(@Valid @RequestBody GastoRequestDTO dto) {
 		return ResponseEntity.ok(
-				this.gastoService.atualizar(usuarioId, dto));
+				this.gastoService.atualizar(this.usuarioId(), dto));
 	}
 	
-	@DeleteMapping("/{usuarioId}/{gastoId}")
-	public ResponseEntity<Void> deletar(@PathVariable Long usuarioId, @PathVariable Long gastoId) {
-		this.gastoService.deletar(usuarioId, gastoId);
+	@DeleteMapping("/{gastoId}")
+	public ResponseEntity<Void> deletar(@PathVariable Long gastoId) {
+		this.gastoService.deletar(this.usuarioId(), gastoId);
 		return ResponseEntity.noContent().build();
 	}
 
