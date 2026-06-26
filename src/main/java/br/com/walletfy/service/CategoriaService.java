@@ -80,25 +80,35 @@ public class CategoriaService {
 	}
 	
 	public void cadastrarCategoriasPadrao(Long usuarioId) {
-		 List<CategoriaRequestDTO> categoriasPadrao = List.of(
-	        // DESPESA
-	        new CategoriaRequestDTO("Alimentação", TipoCategoria.DESPESA, "pi-shopping-cart", "#f97316", true),
-	        new CategoriaRequestDTO("Transporte", TipoCategoria.DESPESA, "pi-car", "#3b82f6", true),
-	        new CategoriaRequestDTO("Moradia", TipoCategoria.DESPESA, "pi-home", "#f59e0b", true),
-	        new CategoriaRequestDTO("Compras", TipoCategoria.DESPESA, "pi-shopping-bag", "#9333ea", true),
-	        new CategoriaRequestDTO("Saúde", TipoCategoria.DESPESA, "pi-heart", "#22c55e", true),
-	        new CategoriaRequestDTO("Lazer", TipoCategoria.DESPESA, "pi-ticket", "#ec4899", true),
-	        new CategoriaRequestDTO("Outro", TipoCategoria.DESPESA, "pi-th-large", "#6b7280", true),
+	    List<Categoria> categorias = List.of(
 
-	        // RECEITA
-	        new CategoriaRequestDTO("Salário", TipoCategoria.RECEITA, "pi-briefcase", "#16a34a", true),
-	        new CategoriaRequestDTO("Freelance", TipoCategoria.RECEITA, "pi-file", "#0ea5e9", true),
-	        new CategoriaRequestDTO("Investimentos", TipoCategoria.RECEITA, "pi-chart-bar", "#7c3aed", true),
-	        new CategoriaRequestDTO("Aluguel", TipoCategoria.RECEITA, "pi-home", "#f59e0b", true),
-	        new CategoriaRequestDTO("Outro", TipoCategoria.RECEITA, "pi-th-large", "#6b7280", true)
+	        montarCategoria(usuarioId, "Alimentação", TipoCategoria.DESPESA, "pi-shopping-cart", "#f97316"),
+	        montarCategoria(usuarioId, "Transporte",  TipoCategoria.DESPESA, "pi-car",           "#3b82f6"),
+	        montarCategoria(usuarioId, "Moradia",     TipoCategoria.DESPESA, "pi-home",          "#f59e0b"),
+	        montarCategoria(usuarioId, "Compras",     TipoCategoria.DESPESA, "pi-shopping-bag",  "#9333ea"),
+	        montarCategoria(usuarioId, "Saúde",       TipoCategoria.DESPESA, "pi-heart",         "#22c55e"),
+	        montarCategoria(usuarioId, "Lazer",       TipoCategoria.DESPESA, "pi-ticket",        "#ec4899"),
+	        montarCategoria(usuarioId, "Outro",       TipoCategoria.DESPESA, "pi-th-large",      "#6b7280"),
+
+	        montarCategoria(usuarioId, "Salário",       TipoCategoria.RECEITA, "pi-briefcase",  "#16a34a"),
+	        montarCategoria(usuarioId, "Freelance",     TipoCategoria.RECEITA, "pi-file",       "#0ea5e9"),
+	        montarCategoria(usuarioId, "Investimentos", TipoCategoria.RECEITA, "pi-chart-bar",  "#7c3aed"),
+	        montarCategoria(usuarioId, "Aluguel",       TipoCategoria.RECEITA, "pi-home",       "#f59e0b"),
+	        montarCategoria(usuarioId, "Outro",         TipoCategoria.RECEITA, "pi-th-large",   "#6b7280")
 	    );
 
-	    categoriasPadrao.forEach(dto -> this.cadastrar(usuarioId, dto));
+	    this.categoriaRepository.saveAll(categorias);
+	}
+
+	private Categoria montarCategoria(Long usuarioId, String nome, TipoCategoria tipo, String icone, String cor) {
+	    return Categoria.builder()
+	            .usuarioId(usuarioId)
+	            .nome(nome)
+	            .tipo(tipo)
+	            .icone(icone)
+	            .cor(cor)
+	            .ativo(true)
+	            .build();
 	}
 
 }
