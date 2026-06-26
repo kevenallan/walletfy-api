@@ -28,7 +28,7 @@ public interface GastoRepository extends JpaRepository<Gasto, Long>{
 			        SUM(R.VALOR) AS RECEITAS
 			    FROM RECEITA R
 			    WHERE
-			        R.USUARIO_ID = 1
+			        R.USUARIO_ID = :usuarioId
 			        AND TO_CHAR(R.DATA_RECEITA, 'YYYY-MM') >= TO_CHAR(CURRENT_DATE - INTERVAL '5 MONTHS', 'YYYY-MM')
 			        AND TO_CHAR(R.DATA_RECEITA, 'YYYY-MM') <= TO_CHAR(CURRENT_DATE, 'YYYY-MM')
 			        AND R.ATIVO = TRUE
@@ -42,7 +42,7 @@ public interface GastoRepository extends JpaRepository<Gasto, Long>{
 			        SUM(CASE WHEN G.STATUS_ID != 1 THEN G.VALOR ELSE 0 END) AS VALOR_PENDENTE
 			    FROM GASTO G
 			    WHERE
-			        G.USUARIO_ID = 1
+			        G.USUARIO_ID = :usuarioId
 			        AND TO_CHAR(G.DATA_GASTO, 'YYYY-MM') >= TO_CHAR(CURRENT_DATE - INTERVAL '5 MONTHS', 'YYYY-MM')
 			        AND TO_CHAR(G.DATA_GASTO, 'YYYY-MM') <= TO_CHAR(CURRENT_DATE, 'YYYY-MM')
 			        AND G.ATIVO = TRUE
