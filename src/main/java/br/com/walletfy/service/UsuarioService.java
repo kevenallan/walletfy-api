@@ -28,8 +28,10 @@ public class UsuarioService {
 				.senha(dto.getSenha())
 				.ativo("S")
 				.build();
+		
+		Usuario usuarioCadastrado = this.usuarioRepository.save(usuario);
 
-		return UsuarioMapper.toResponseDTO(this.usuarioRepository.save(usuario));
+		return UsuarioMapper.toResponseDTO(usuarioCadastrado);
 	}
 	
 	public AuthResponseDTO login(LoginDTO dto) {

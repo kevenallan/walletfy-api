@@ -28,7 +28,7 @@ public interface ReceitaRepository extends JpaRepository<Receita, Long>{
 			        SUM(CASE WHEN R.STATUS_ID = 2 THEN R.VALOR ELSE 0 END) AS VALOR_PENDENTE
 			    FROM RECEITA R
 			    WHERE
-			        R.USUARIO_ID = 1
+			        R.USUARIO_ID = :usuarioId
 			        AND TO_CHAR(R.DATA_RECEITA, 'YYYY-MM') >= TO_CHAR(CURRENT_DATE - INTERVAL '5 MONTHS', 'YYYY-MM')
 			        AND TO_CHAR(R.DATA_RECEITA, 'YYYY-MM') <= TO_CHAR(CURRENT_DATE, 'YYYY-MM')
 			        AND R.ATIVO = TRUE
@@ -40,7 +40,7 @@ public interface ReceitaRepository extends JpaRepository<Receita, Long>{
 			        SUM(G.VALOR) AS GASTOS
 			    FROM GASTO G
 			    WHERE
-			        G.USUARIO_ID = 1
+			        G.USUARIO_ID = :usuarioId
 			        AND TO_CHAR(G.DATA_GASTO, 'YYYY-MM') >= TO_CHAR(CURRENT_DATE - INTERVAL '5 MONTHS', 'YYYY-MM')
 			        AND TO_CHAR(G.DATA_GASTO, 'YYYY-MM') <= TO_CHAR(CURRENT_DATE, 'YYYY-MM')
 			        AND G.ATIVO = TRUE
@@ -55,7 +55,7 @@ public interface ReceitaRepository extends JpaRepository<Receita, Long>{
 			    FROM RECEITA R
 			        INNER JOIN CATEGORIA C ON C.ID = R.CATEGORIA_ID
 			    WHERE
-			        R.USUARIO_ID = 1
+			        R.USUARIO_ID = :usuarioId
 			        AND TO_CHAR(R.DATA_RECEITA, 'YYYY-MM') >= TO_CHAR(CURRENT_DATE - INTERVAL '5 MONTHS', 'YYYY-MM')
 			        AND TO_CHAR(R.DATA_RECEITA, 'YYYY-MM') <= TO_CHAR(CURRENT_DATE, 'YYYY-MM')
 			        AND R.ATIVO = TRUE
