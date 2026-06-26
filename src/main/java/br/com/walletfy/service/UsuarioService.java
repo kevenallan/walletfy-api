@@ -19,7 +19,7 @@ public class UsuarioService {
 	
 	private final PasswordEncoder passwordEncoder;
 	
-	public AuthResponseDTO cadastrar(UsuarioRequestDTO dto) {
+	public Usuario cadastrar(UsuarioRequestDTO dto) {
 		if (this.usuarioRepository.existsByEmail(dto.getEmail())) {
 			throw new RegraNegocioException("E-mail já cadastrado");
 		}
@@ -28,12 +28,10 @@ public class UsuarioService {
 				.nome(dto.getNome())
 				.email(dto.getEmail())
 				.senha(passwordEncoder.encode(dto.getSenha()))
-				.ativo("S")
+				.ativo(true)
 				.build();
 		
-		Usuario usuarioCadastrado = this.usuarioRepository.save(usuario);
-
-		return UsuarioMapper.toResponseDTO(usuarioCadastrado);
+		return this.usuarioRepository.save(usuario);
 	}
 
 	public Usuario getReference(Long usuarioId) {

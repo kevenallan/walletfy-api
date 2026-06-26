@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.walletfy.dto.AuthResponseDTO;
 import br.com.walletfy.dto.LoginRequestDTO;
 import br.com.walletfy.dto.UsuarioRequestDTO;
-import br.com.walletfy.service.CategoriaService;
 import br.com.walletfy.entity.Usuario;
 import br.com.walletfy.security.JwtService;
+import br.com.walletfy.service.CategoriaService;
 import br.com.walletfy.service.UsuarioService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,9 +32,10 @@ public class AuthController {
 
 	@PostMapping("/cadastrar")
 	public ResponseEntity<AuthResponseDTO> cadastrar(@Valid @RequestBody UsuarioRequestDTO dto) {
-		AuthResponseDTO authResponseDTO = this.usuarioService.cadastrar(dto);
-//		this.categoriaService.cadastrarCategoriasPadrao(authResponseDTO.getId());
-		return ResponseEntity.ok(authResponseDTO);
+		Usuario usuario = this.usuarioService.cadastrar(dto);
+		this.categoriaService.cadastrarCategoriasPadrao(usuario.getId());
+		String token = this.jwtService.gerarToken(usuario.getId());
+	    return ResponseEntity.ok(new AuthResponseDTO(token, usuario.getNome()));
 	}
 	
 	@PostMapping

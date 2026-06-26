@@ -45,7 +45,7 @@ public class Usuario implements UserDetails {
 
 	private String fotoUrl;
 
-	private String ativo;
+	private Boolean ativo;
 
 	@CreationTimestamp
 	private LocalDateTime dataCadastro;
@@ -82,6 +82,6 @@ public class Usuario implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return "S".equals(ativo);
+        return ativo;
     }
 }
