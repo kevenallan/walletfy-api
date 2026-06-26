@@ -29,6 +29,7 @@ public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
     private final UserDetailsServiceImpl userDetailsService;
+    private final SecurityExceptionHandler securityExceptionHandler;
 
     @Value("${cors.allowed-origins}")
     private List<String> allowedOrigins;
@@ -45,6 +46,9 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .exceptionHandling(ex -> ex
+                	    .authenticationEntryPoint(securityExceptionHandler)
+                	    .accessDeniedHandler(securityExceptionHandler))
                 .build();
     }
 

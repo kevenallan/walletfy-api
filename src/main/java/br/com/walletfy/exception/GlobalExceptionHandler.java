@@ -6,6 +6,7 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -78,4 +79,16 @@ public class GlobalExceptionHandler {
 
 		    return ResponseEntity.badRequest().body(erro);
 	}
+	 
+	 @ExceptionHandler(BadCredentialsException.class)
+	 public ResponseEntity<ErrorResponseDTO> tratarCredenciaisInvalidas(BadCredentialsException ex) {
+
+	     ErrorResponseDTO erro = ErrorResponseDTO.builder()
+	             .status(HttpStatus.UNAUTHORIZED.value())
+	             .mensagem("E-mail ou senha inválidos")
+	             .dataHora(LocalDateTime.now())
+	             .build();
+
+	     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(erro);
+	 }
 }
