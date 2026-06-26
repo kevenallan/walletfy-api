@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 public class UsuarioService {
 
 	private final UsuarioRepository usuarioRepository;
+	private final CategoriaService categoriaService;
 	
 	public AuthResponseDTO cadastrar(UsuarioRequestDTO dto) {
 		if (this.usuarioRepository.existsByEmail(dto.getEmail())) {
@@ -28,8 +29,12 @@ public class UsuarioService {
 				.senha(dto.getSenha())
 				.ativo("S")
 				.build();
+		
+		Usuario usuarioCadastrado = this.usuarioRepository.save(usuario);
+		
+		this.categoriaService.cadastrarCategoriasPadrao(usuarioCadastrado.getId());
 
-		return UsuarioMapper.toResponseDTO(this.usuarioRepository.save(usuario));
+		return UsuarioMapper.toResponseDTO(usuarioCadastrado);
 	}
 	
 	public AuthResponseDTO login(LoginDTO dto) {

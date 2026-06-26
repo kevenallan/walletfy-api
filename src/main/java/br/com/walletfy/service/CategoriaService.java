@@ -31,6 +31,7 @@ public class CategoriaService {
 		Categoria categoria = Categoria.builder()
 				.usuarioId(usuarioId)
 				.nome(dto.getNome())
+				.tipo(dto.getTipo())
 				.cor(dto.getCor())
 				.icone(dto.getIcone())
 				.ativo(true)
@@ -76,6 +77,28 @@ public class CategoriaService {
 	public Categoria getReference(Long categoriaId) {
 		return this.categoriaRepository.findById(categoriaId).orElseThrow(
 				() -> new RegraNegocioException("Categoria não encontrada"));
+	}
+	
+	public void cadastrarCategoriasPadrao(Long usuarioId) {
+		 List<CategoriaRequestDTO> categoriasPadrao = List.of(
+	        // DESPESA
+	        new CategoriaRequestDTO("Alimentação", TipoCategoria.DESPESA, "pi-shopping-cart", "#f97316", true),
+	        new CategoriaRequestDTO("Transporte", TipoCategoria.DESPESA, "pi-car", "#3b82f6", true),
+	        new CategoriaRequestDTO("Moradia", TipoCategoria.DESPESA, "pi-home", "#f59e0b", true),
+	        new CategoriaRequestDTO("Compras", TipoCategoria.DESPESA, "pi-shopping-bag", "#9333ea", true),
+	        new CategoriaRequestDTO("Saúde", TipoCategoria.DESPESA, "pi-heart", "#22c55e", true),
+	        new CategoriaRequestDTO("Lazer", TipoCategoria.DESPESA, "pi-ticket", "#ec4899", true),
+	        new CategoriaRequestDTO("Outro", TipoCategoria.DESPESA, "pi-th-large", "#6b7280", true),
+
+	        // RECEITA
+	        new CategoriaRequestDTO("Salário", TipoCategoria.RECEITA, "pi-briefcase", "#16a34a", true),
+	        new CategoriaRequestDTO("Freelance", TipoCategoria.RECEITA, "pi-file", "#0ea5e9", true),
+	        new CategoriaRequestDTO("Investimentos", TipoCategoria.RECEITA, "pi-chart-bar", "#7c3aed", true),
+	        new CategoriaRequestDTO("Aluguel", TipoCategoria.RECEITA, "pi-home", "#f59e0b", true),
+	        new CategoriaRequestDTO("Outro", TipoCategoria.RECEITA, "pi-th-large", "#6b7280", true)
+	    );
+
+	    categoriasPadrao.forEach(dto -> this.cadastrar(usuarioId, dto));
 	}
 
 }
