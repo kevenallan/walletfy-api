@@ -1,8 +1,8 @@
 package br.com.walletfy.service;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import br.com.walletfy.dto.LoginDTO;
 import br.com.walletfy.dto.AuthResponseDTO;
 import br.com.walletfy.dto.UsuarioRequestDTO;
 import br.com.walletfy.entity.Usuario;
@@ -17,7 +17,9 @@ public class UsuarioService {
 
 	private final UsuarioRepository usuarioRepository;
 	
-	public AuthResponseDTO cadastrar(UsuarioRequestDTO dto) {
+	private final PasswordEncoder passwordEncoder;
+	
+	public Usuario cadastrar(UsuarioRequestDTO dto) {
 		if (this.usuarioRepository.existsByEmail(dto.getEmail())) {
 			throw new RegraNegocioException("E-mail já cadastrado");
 		}
@@ -25,29 +27,11 @@ public class UsuarioService {
 		Usuario usuario = Usuario.builder()
 				.nome(dto.getNome())
 				.email(dto.getEmail())
-				.senha(dto.getSenha())
-				.ativo("S")
+				.senha(passwordEncoder.encode(dto.getSenha()))
+				.ativo(true)
 				.build();
 		
-		Usuario usuarioCadastrado = this.usuarioRepository.save(usuario);
-
-		return UsuarioMapper.toResponseDTO(usuarioCadastrado);
-	}
-	
-	public AuthResponseDTO login(LoginDTO dto) {
-		
-		Usuario usuario = this.usuarioRepository.findByEmail(dto.getEmail())
-				.orElseThrow(() -> new RegraNegocioException("Email não cadastrado"));
-		
-		if (!usuario.getSenha().equals(dto.getSenha())) {
-			throw new RegraNegocioException("Senha incorreta");
-		}
-
-		return AuthResponseDTO.builder()
-	            .id(usuario.getId())
-	            .nome(usuario.getNome())
-	            .email(usuario.getEmail())
-	            .build();
+		return this.usuarioRepository.save(usuario);
 	}
 
 	public Usuario getReference(Long usuarioId) {
@@ -59,5 +43,9 @@ public class UsuarioService {
 		Usuario usuario = this.usuarioRepository.findById(usuarioId).orElseThrow(
 				() -> new RegraNegocioException("Usuario não encontrado"));
 		return UsuarioMapper.toResponseDTO(usuario);
+	}
+	
+	public Usuario buscarPorEmail(String email) {
+		return this.usuarioRepository.findByEmail(email).orElseThrow(() -> new RegraNegocioException("Usuario não encontrado"));
 	}
 }

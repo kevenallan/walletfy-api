@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.walletfy.dto.ReceitaRequestDTO;
 import br.com.walletfy.dto.ReceitaResponseDTO;
 import br.com.walletfy.dto.ReceitaResumoResponseDTO;
+import br.com.walletfy.security.SecurityUtils;
 import br.com.walletfy.service.ReceitaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,42 +26,45 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/receita")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:4200")
 public class ReceitaController {
 
 	private final ReceitaService receitaService;
-	
-	@PostMapping("/{usuarioId}")
-	public ResponseEntity<ReceitaResponseDTO> cadastrar(@PathVariable Long usuarioId, @Valid @RequestBody ReceitaRequestDTO dto) {
-		return ResponseEntity.status(HttpStatus.CREATED)
-				.body(this.receitaService.cadastrar(usuarioId, dto));
+
+	private Long usuarioId() {
+	    return SecurityUtils.getUsuarioIdAutenticado();
 	}
-	
-	@GetMapping("/{usuarioId}")
-	public ResponseEntity<List<ReceitaResponseDTO>> listar(@PathVariable Long usuarioId, @RequestParam LocalDate dataInicio, @RequestParam LocalDate dataFim) {
-		return ResponseEntity.ok(this.receitaService.listar(usuarioId, dataInicio, dataFim));
+
+	@PostMapping
+	public ResponseEntity<ReceitaResponseDTO> cadastrar(@Valid @RequestBody ReceitaRequestDTO dto) {
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(this.receitaService.cadastrar(this.usuarioId(), dto));
 	}
 	
 	@GetMapping
-	public ResponseEntity<ReceitaResponseDTO> detalhar(@RequestParam Long receitaId, @RequestParam Long usuarioId) {
-	    return ResponseEntity.ok(
-	            this.receitaService.detalhar(receitaId, usuarioId));
-	}
-
-	@PutMapping("/{usuarioId}")
-	public ResponseEntity<ReceitaResponseDTO> atualizar(@PathVariable Long usuarioId, @Valid @RequestBody ReceitaRequestDTO dto) {
-		return ResponseEntity.ok(this.receitaService.atualizar(usuarioId, dto));
+	public ResponseEntity<List<ReceitaResponseDTO>> listar(@RequestParam LocalDate dataInicio, @RequestParam LocalDate dataFim) {
+		return ResponseEntity.ok(this.receitaService.listar(this.usuarioId(), dataInicio, dataFim));
 	}
 	
-	@DeleteMapping("/{usuarioId}/{receitaId}")
-	public ResponseEntity<Void> deletar(@PathVariable Long usuarioId, @PathVariable Long receitaId){
-		this.receitaService.deletar(usuarioId, receitaId);
+	@GetMapping("/{receitaId}")
+	public ResponseEntity<ReceitaResponseDTO> detalhar(@PathVariable Long receitaId) {
+	    return ResponseEntity.ok(
+	            this.receitaService.detalhar(receitaId, this.usuarioId()));
+	}
+
+	@PutMapping
+	public ResponseEntity<ReceitaResponseDTO> atualizar (@Valid @RequestBody ReceitaRequestDTO dto) {
+		return ResponseEntity.ok(this.receitaService.atualizar(this.usuarioId(), dto));
+	}
+	
+	@DeleteMapping("/{receitaId}")
+	public ResponseEntity<Void> deletar( @PathVariable Long receitaId){
+		this.receitaService.deletar(this.usuarioId(), receitaId);
 		return ResponseEntity.noContent().build();
 	}
 	
 	@GetMapping("/resumo")
-    public ResponseEntity<List<ReceitaResumoResponseDTO>> resumo(@RequestParam Long usuarioId) {
-        return ResponseEntity.ok(this.receitaService.gerarResumo(usuarioId));
+    public ResponseEntity<List<ReceitaResumoResponseDTO>> resumo() {
+        return ResponseEntity.ok(this.receitaService.gerarResumo(this.usuarioId()));
     }
 
 }
