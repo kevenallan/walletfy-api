@@ -34,9 +34,9 @@ public class CategoriaController {
 	}
 	
 	@PostMapping
-    public ResponseEntity<CategoriaResponseDTO> cadastrar(@PathVariable Long usuarioId, @Valid @RequestBody CategoriaRequestDTO dto) {
+    public ResponseEntity<CategoriaResponseDTO> cadastrar(@Valid @RequestBody CategoriaRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(categoriaService.cadastrar(usuarioId, dto));
+                .body(categoriaService.cadastrar(this.usuarioId(), dto));
     }
 
     @GetMapping
