@@ -34,7 +34,7 @@ public class CategoriaService {
 				.tipo(dto.getTipo())
 				.cor(dto.getCor())
 				.icone(dto.getIcone())
-				.ativo(true)
+				.ativo(dto.getAtivo())
 				.build();
 
 		this.categoriaRepository.save(categoria);
@@ -66,12 +66,21 @@ public class CategoriaService {
     			.orElseThrow(() -> new RegraNegocioException("Categoria não encontrada"));
 
         categoriaExistente.setNome(categoria.getNome());
+        categoriaExistente.setTipo(categoria.getTipo());
         categoriaExistente.setCor(categoria.getCor());
         categoriaExistente.setIcone(categoria.getIcone());
         categoriaExistente.setAtivo(categoria.getAtivo());
 
     	Categoria categoriaAtualizada = this.categoriaRepository.save(categoriaExistente);
     	return categoriaMapper.toResponseDTO(categoriaAtualizada);
+    }
+    
+    public void deletar(Long usuarioId, Long categoriaId) {
+    	Usuario usuario = this.usuarioService.getReference(usuarioId);
+    	Categoria categoria = this.categoriaRepository.findByUsuarioIdAndId(usuario.getId(), categoriaId)
+    			.orElseThrow(() -> new RegraNegocioException("Categoria não encontrada"));
+
+    	this.categoriaRepository.delete(categoria);
     }
     
 	public Categoria getReference(Long categoriaId) {
