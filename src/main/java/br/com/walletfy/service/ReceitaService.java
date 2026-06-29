@@ -101,5 +101,9 @@ public class ReceitaService {
 		
 		return this.receitaRepository.getResumo(usuarioId).get();
 	}
+	
+	public long getQuantidadeCategoriaReceita(Long usuarioId, Long categoriaId) {
+		return this.receitaRepository.countByUsuarioIdAndCategoriaId(usuarioId, categoriaId);
+	}
 
 }
