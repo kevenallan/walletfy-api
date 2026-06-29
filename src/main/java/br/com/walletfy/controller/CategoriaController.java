@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.walletfy.dto.CategoriaRequestDTO;
 import br.com.walletfy.dto.CategoriaResponseDTO;
 import br.com.walletfy.enums.TipoCategoria;
+import br.com.walletfy.facade.CategoriaFacade;
 import br.com.walletfy.security.SecurityUtils;
 import br.com.walletfy.service.CategoriaService;
 import jakarta.validation.Valid;
@@ -29,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 public class CategoriaController {
 
 	private final CategoriaService categoriaService;
+	private final CategoriaFacade categoriaFacade;
 
 	private Long usuarioId() {
 	    return SecurityUtils.getUsuarioIdAutenticado();
@@ -59,8 +61,9 @@ public class CategoriaController {
     }
 
     @DeleteMapping("/{categoriaId}")
-    public ResponseEntity<Void> deletar(@PathVariable Long categoriaId) {
-    	this.categoriaService.deletar(this.usuarioId(), categoriaId);
+    public ResponseEntity<Void> deletar(@PathVariable Long categoriaId, @RequestParam TipoCategoria tipo) {
+    	this.categoriaFacade.deletar(this.usuarioId(), categoriaId, tipo);
         return  ResponseEntity.noContent().build();
     }
+
 }

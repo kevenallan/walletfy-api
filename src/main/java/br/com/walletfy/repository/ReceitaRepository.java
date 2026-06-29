@@ -18,6 +18,7 @@ public interface ReceitaRepository extends JpaRepository<Receita, Long>{
 	List<Receita> findByUsuarioId(Long usuarioId);
 	Optional<Receita> findByIdAndUsuarioId(Long receitaId, Long usuarioId);
 	List<Receita> findByUsuarioIdAndDataReceitaBetween(Long usuarioId, LocalDate dataInicio, LocalDate dataFim);
+	Long countByUsuarioIdAndCategoriaId(Long usuarioId, Long gastoId);
 	
 	@Query(value = """
 		    WITH RESUMO_RECEITA AS (

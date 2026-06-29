@@ -21,6 +21,8 @@ public interface GastoRepository extends JpaRepository<Gasto, Long>{
 
 	List<Gasto> findByUsuarioIdAndDataGastoBetween(Long usuarioId, LocalDate dataInicio, LocalDate dataFim);
 	
+	Long countByUsuarioIdAndCategoriaId(Long usuarioId, Long gastoId);
+	
 	@Query(value = """
 		    WITH RESUMO_RECEITA AS (
 			    SELECT

@@ -106,4 +106,8 @@ public class GastoService {
 		}
 		this.gastoRepository.deleteById(gasto.getId());
 	}
+
+	public long getQuantidadeCategoriaGasto(Long usuarioId, Long categoriaId) {
+		return this.gastoRepository.countByUsuarioIdAndCategoriaId(usuarioId, categoriaId);
+	}
 }

@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import br.com.walletfy.dto.CategoriaRequestDTO;
 import br.com.walletfy.dto.CategoriaResponseDTO;
 import br.com.walletfy.entity.Categoria;
-import br.com.walletfy.enums.TipoCategoria;
 import br.com.walletfy.entity.Usuario;
+import br.com.walletfy.enums.TipoCategoria;
 import br.com.walletfy.exception.RegraNegocioException;
 import br.com.walletfy.mapper.CategoriaMapper;
 import br.com.walletfy.repository.CategoriaRespository;
@@ -18,12 +18,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CategoriaService {
 
-	private final CategoriaRespository categoriaRepository;
 	
 	private final UsuarioService usuarioService;
 	
 	private final CategoriaMapper categoriaMapper;
 	
+	private final CategoriaRespository categoriaRepository;
+
 	public CategoriaResponseDTO cadastrar(Long usuarioId, CategoriaRequestDTO dto) {
 		
 		this.usuarioService.buscarPorId(usuarioId);
@@ -60,6 +61,11 @@ public class CategoriaService {
                 .toList();
     }
     
+    public CategoriaResponseDTO buscarPorId(Long usuarioId, Long categoriaId) {
+    	return this.categoriaMapper.toResponseDTO(this.categoriaRepository.findByUsuarioIdAndId(usuarioId, categoriaId).orElseThrow(
+    			() ->  new RegraNegocioException("Categoria não encontrada")));
+    }
+    
     public CategoriaResponseDTO atualizar(Long usuarioId, CategoriaRequestDTO categoria) {
     	Usuario usuario = this.usuarioService.getReference(usuarioId);
     	Categoria categoriaExistente = this.categoriaRepository.findByUsuarioIdAndId(usuario.getId(), categoria.getId())
@@ -76,11 +82,9 @@ public class CategoriaService {
     }
     
     public void deletar(Long usuarioId, Long categoriaId) {
-    	Usuario usuario = this.usuarioService.getReference(usuarioId);
-    	Categoria categoria = this.categoriaRepository.findByUsuarioIdAndId(usuario.getId(), categoriaId)
-    			.orElseThrow(() -> new RegraNegocioException("Categoria não encontrada"));
-
-    	this.categoriaRepository.delete(categoria);
+        Categoria categoria = this.categoriaRepository.findByUsuarioIdAndId(usuarioId, categoriaId)
+                .orElseThrow(() -> new RegraNegocioException("Categoria não encontrada"));
+        this.categoriaRepository.delete(categoria);
     }
     
 	public Categoria getReference(Long categoriaId) {
