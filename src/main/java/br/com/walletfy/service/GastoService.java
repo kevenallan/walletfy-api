@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import br.com.walletfy.dto.GastoRequestDTO;
 import br.com.walletfy.dto.GastoResponseDTO;
 import br.com.walletfy.dto.GastoResumoResponseDTO;
+import br.com.walletfy.dto.ResumoAnualResponseDTO;
 import br.com.walletfy.entity.Categoria;
 import br.com.walletfy.entity.FormaPagamento;
 import br.com.walletfy.entity.Gasto;
@@ -72,7 +73,13 @@ public class GastoService {
 		
 		return this.gastoRepository.getResumo(usuarioId).get();
 	}
-	
+
+	public List<ResumoAnualResponseDTO> gerarResumoAnual(Long usuarioId, int ano) {
+		this.usuarioService.buscarPorId(usuarioId);
+
+		return this.gastoRepository.getResumoAnual(usuarioId, ano);
+	}
+
 	public GastoResponseDTO atualizar(Long usuarioId, GastoRequestDTO dto) {
 		Gasto gasto = this.gastoRepository.findById(dto.getId()).orElseThrow(() -> new RegraNegocioException("Gasto não encontrado"));
 		Usuario usuario = this.usuarioService.getReference(usuarioId);
@@ -110,4 +117,5 @@ public class GastoService {
 	public long getQuantidadeCategoriaGasto(Long usuarioId, Long categoriaId) {
 		return this.gastoRepository.countByUsuarioIdAndCategoriaId(usuarioId, categoriaId);
 	}
+	
 }
