@@ -25,7 +25,15 @@ public interface GastoRepository extends JpaRepository<Gasto, Long>{
 	Long countByUsuarioIdAndCategoriaId(Long usuarioId, Long gastoId);
 	
 	@Query(value = """
-		    WITH RESUMO_RECEITA AS (
+			WITH MESES AS (
+			    SELECT TO_CHAR(GS, 'YYYY-MM') AS MES
+			    FROM GENERATE_SERIES(
+			        DATE_TRUNC('month', CURRENT_DATE - INTERVAL '5 months'),
+			        DATE_TRUNC('month', CURRENT_DATE),
+			        INTERVAL '1 month'
+			    ) AS GS
+			),
+			RESUMO_RECEITA AS (
 			    SELECT
 			        TO_CHAR(R.DATA_RECEITA, 'YYYY-MM') AS MES,
 			        SUM(R.VALOR) AS RECEITAS
@@ -52,24 +60,25 @@ public interface GastoRepository extends JpaRepository<Gasto, Long>{
 			    GROUP BY TO_CHAR(G.DATA_GASTO, 'YYYY-MM')
 			)
 			SELECT
-			    RG.MES,
+			    M.MES,
 			    COALESCE(RR.RECEITAS, 0) AS RECEITA,
-			    RG.DESPESAS,
-			    (COALESCE(RR.RECEITAS, 0) - RG.DESPESAS) AS SALDO,
-			    RG.PENDENTES,
-			    RG.VALOR_PENDENTE,
+			    COALESCE(RG.DESPESAS, 0) AS DESPESAS,
+			    (COALESCE(RR.RECEITAS, 0) - COALESCE(RG.DESPESAS, 0)) AS SALDO,
+			    COALESCE(RG.PENDENTES, 0) AS PENDENTES,
+			    COALESCE(RG.VALOR_PENDENTE, 0) AS VALOR_PENDENTE,
 			    ROUND(
-			        COALESCE(RR.RECEITAS, 0) - LAG(COALESCE(RR.RECEITAS, 0)) OVER (ORDER BY RG.MES),
-			    1) AS VARIACAO_RECEITA,
+			        COALESCE(RR.RECEITAS, 0) - LAG(COALESCE(RR.RECEITAS, 0)) OVER (ORDER BY M.MES),
+			    2) AS VARIACAO_RECEITA,
 			    ROUND(
-			        RG.DESPESAS - LAG(RG.DESPESAS) OVER (ORDER BY RG.MES),
-			    1) AS VARIACAO_DESPESAS,
+			        COALESCE(RG.DESPESAS, 0) - LAG(COALESCE(RG.DESPESAS, 0)) OVER (ORDER BY M.MES),
+			    2) AS VARIACAO_DESPESAS,
 			    ROUND(
-			        (COALESCE(RR.RECEITAS, 0) - RG.DESPESAS) - LAG(COALESCE(RR.RECEITAS, 0) - RG.DESPESAS) OVER (ORDER BY RG.MES),
-			    1) AS VARIACAO_SALDO
-			FROM RESUMO_GASTO RG
-			    LEFT JOIN RESUMO_RECEITA RR ON RR.MES = RG.MES
-			ORDER BY RG.MES
+			        (COALESCE(RR.RECEITAS, 0) - COALESCE(RG.DESPESAS, 0)) - LAG(COALESCE(RR.RECEITAS, 0) - COALESCE(RG.DESPESAS, 0)) OVER (ORDER BY M.MES),
+			    2) AS VARIACAO_SALDO
+			FROM MESES M
+			    LEFT JOIN RESUMO_GASTO RG ON RG.MES = M.MES
+			    LEFT JOIN RESUMO_RECEITA RR ON RR.MES = M.MES
+			ORDER BY M.MES;
 		    """, nativeQuery = true)
 	Optional<List<GastoResumoResponseDTO>> getResumo(@Param("usuarioId") Long usuarioId);
 	
