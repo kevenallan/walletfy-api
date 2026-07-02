@@ -4,7 +4,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.walletfy.dto.AuthResponseDTO;
+import br.com.walletfy.dto.UsuarioEdicaoRequestDTO;
 import br.com.walletfy.dto.UsuarioRequestDTO;
+import br.com.walletfy.dto.UsuarioResponseDTO;
 import br.com.walletfy.entity.Usuario;
 import br.com.walletfy.exception.RegraNegocioException;
 import br.com.walletfy.mapper.UsuarioMapper;
@@ -47,5 +49,26 @@ public class UsuarioService {
 	
 	public Usuario buscarPorEmail(String email) {
 		return this.usuarioRepository.findByEmail(email).orElseThrow(() -> new RegraNegocioException("Usuario não encontrado"));
+	}
+	
+	public UsuarioResponseDTO atualizar(Long usuarioId, UsuarioEdicaoRequestDTO dto) {
+		Usuario usuarioEncontrado = this.getReference(usuarioId);
+		
+		if(!this.verificarSenhaAtual(usuarioEncontrado, dto)) {
+			throw new RegraNegocioException("Senha atual não é igual a informada");
+		}
+		
+		usuarioEncontrado.setNome(dto.getNome());
+		usuarioEncontrado.setEmail(dto.getEmail());
+		usuarioEncontrado.setTelefone(dto.getTelefone());
+		usuarioEncontrado.setDataNascimento(dto.getDataNascimento());
+		usuarioEncontrado.setFotoUrl(dto.getFoto());
+		
+		Usuario usuarioAtualizado = this.usuarioRepository.save(usuarioEncontrado);
+		return UsuarioMapper.toUsuarioResponseDTO(usuarioAtualizado);
+	}
+	
+	private boolean verificarSenhaAtual(Usuario usuarioEncontrado, UsuarioEdicaoRequestDTO dto) {
+		return passwordEncoder.matches(dto.getSenhaAntiga(), usuarioEncontrado.getSenha());
 	}
 }

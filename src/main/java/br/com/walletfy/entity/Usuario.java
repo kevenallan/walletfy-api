@@ -1,5 +1,6 @@
 package br.com.walletfy.entity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -49,6 +50,10 @@ public class Usuario implements UserDetails {
 
 	@CreationTimestamp
 	private LocalDateTime dataCadastro;
+	
+	private String telefone;
+
+    private LocalDate dataNascimento;
 
 	@Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
