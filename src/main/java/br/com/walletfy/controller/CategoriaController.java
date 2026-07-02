@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.walletfy.dto.CategoriaRequestDTO;
 import br.com.walletfy.dto.CategoriaResponseDTO;
+import br.com.walletfy.dto.CategoriaResumoResponseDTO;
 import br.com.walletfy.enums.TipoCategoria;
 import br.com.walletfy.facade.CategoriaFacade;
 import br.com.walletfy.security.SecurityUtils;
@@ -64,6 +65,11 @@ public class CategoriaController {
     public ResponseEntity<Void> deletar(@PathVariable Long categoriaId, @RequestParam TipoCategoria tipo) {
     	this.categoriaFacade.deletar(this.usuarioId(), categoriaId, tipo);
         return  ResponseEntity.noContent().build();
+    }
+
+	@GetMapping("/resumo")
+    public ResponseEntity<CategoriaResumoResponseDTO> resumo(@RequestParam(required = true) TipoCategoria tipo) {
+        return ResponseEntity.ok(this.categoriaService.gerarResumo(this.usuarioId(), tipo));
     }
 
 }

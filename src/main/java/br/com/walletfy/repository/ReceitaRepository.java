@@ -92,5 +92,5 @@ public interface ReceitaRepository extends JpaRepository<Receita, Long>{
 			    LEFT JOIN PRINCIPAL_CATEGORIA_MES P ON P.MES = M.MES AND P.RANK = 1
 			ORDER BY M.MES;
 		    """, nativeQuery = true)
-		Optional<List<ReceitaResumoResponseDTO>> getResumo(@Param("usuarioId") Long usuarioId);
+		List<ReceitaResumoResponseDTO> getResumo(@Param("usuarioId") Long usuarioId);
 }
