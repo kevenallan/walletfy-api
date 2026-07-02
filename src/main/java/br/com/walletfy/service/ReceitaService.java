@@ -99,7 +99,7 @@ public class ReceitaService {
 	public List<ReceitaResumoResponseDTO> gerarResumo(Long usuarioId) {
 		this.usuarioService.buscarPorId(usuarioId);
 		
-		return this.receitaRepository.getResumo(usuarioId).get();
+		return this.receitaRepository.getResumo(usuarioId);
 	}
 	
 	public long getQuantidadeCategoriaReceita(Long usuarioId, Long categoriaId) {

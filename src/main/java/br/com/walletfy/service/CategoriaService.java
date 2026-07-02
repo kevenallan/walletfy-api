@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.walletfy.dto.CategoriaRequestDTO;
 import br.com.walletfy.dto.CategoriaResponseDTO;
+import br.com.walletfy.dto.CategoriaResumoResponseDTO;
 import br.com.walletfy.entity.Categoria;
 import br.com.walletfy.entity.Usuario;
 import br.com.walletfy.enums.TipoCategoria;
@@ -122,6 +123,12 @@ public class CategoriaService {
 	            .cor(cor)
 	            .ativo(true)
 	            .build();
+	}
+	
+	public CategoriaResumoResponseDTO gerarResumo(Long usuarioId, TipoCategoria tipo) {
+		this.usuarioService.buscarPorId(usuarioId);
+		
+		return this.categoriaRepository.getResumo(usuarioId, tipo.toString());
 	}
 
 }
