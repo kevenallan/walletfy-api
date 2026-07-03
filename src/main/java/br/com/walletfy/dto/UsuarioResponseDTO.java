@@ -1,6 +1,5 @@
 package br.com.walletfy.dto;
 
-import java.sql.Blob;
 import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;

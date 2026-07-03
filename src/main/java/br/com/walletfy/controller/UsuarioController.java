@@ -1,7 +1,11 @@
 package br.com.walletfy.controller;
 
+
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,4 +34,15 @@ public class UsuarioController {
         return  ResponseEntity.status(HttpStatus.OK)
         		.body(this.usuarioService.atualizar(this.usuarioId(), usuario));
     }
+	
+	 @GetMapping
+	 public ResponseEntity<UsuarioResponseDTO> detalhar() {
+        return ResponseEntity.ok(this.usuarioService.detalhar(this.usuarioId()));
+     }
+	 
+	 @DeleteMapping
+	    public ResponseEntity<Void> deletar() {
+	    	this.usuarioService.deletar(this.usuarioId());
+	        return ResponseEntity.noContent().build();
+	 }
 }

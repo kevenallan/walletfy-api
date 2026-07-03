@@ -54,7 +54,7 @@ public class UsuarioService {
 	public UsuarioResponseDTO atualizar(Long usuarioId, UsuarioEdicaoRequestDTO dto) {
 		Usuario usuarioEncontrado = this.getReference(usuarioId);
 		
-		if(!this.verificarSenhaAtual(usuarioEncontrado, dto)) {
+		if(!dto.getSenhaAntiga().isBlank() && !this.verificarSenhaAtual(usuarioEncontrado, dto)) {
 			throw new RegraNegocioException("Senha atual não é igual a informada");
 		}
 		
@@ -70,5 +70,17 @@ public class UsuarioService {
 	
 	private boolean verificarSenhaAtual(Usuario usuarioEncontrado, UsuarioEdicaoRequestDTO dto) {
 		return passwordEncoder.matches(dto.getSenhaAntiga(), usuarioEncontrado.getSenha());
+	}
+	
+	public UsuarioResponseDTO detalhar(Long usuarioId) {
+		Usuario usuario = this.usuarioRepository.findById(usuarioId).orElseThrow(() -> new RegraNegocioException("Usuario não encontrado"));
+		
+		return UsuarioMapper.toUsuarioResponseDTO(usuario);
+	}
+	
+	public void deletar(Long usuarioId) {
+		Usuario usuario = this.usuarioRepository.findById(usuarioId).orElseThrow(() -> new RegraNegocioException("Usuario não encontrado"));
+		
+		this.usuarioRepository.delete(usuario);
 	}
 }
