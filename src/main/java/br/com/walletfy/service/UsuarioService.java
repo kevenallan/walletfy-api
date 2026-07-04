@@ -60,6 +60,9 @@ public class UsuarioService {
 		
 		usuarioEncontrado.setNome(dto.getNome());
 		usuarioEncontrado.setEmail(dto.getEmail());
+		if(!dto.getSenhaNova().isBlank()) {
+			usuarioEncontrado.setSenha(passwordEncoder.encode(dto.getSenhaNova()));
+		}
 		usuarioEncontrado.setTelefone(dto.getTelefone());
 		usuarioEncontrado.setDataNascimento(dto.getDataNascimento());
 		usuarioEncontrado.setFotoUrl(dto.getFoto());
