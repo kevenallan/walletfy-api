@@ -1,6 +1,6 @@
+
 package br.com.walletfy.service;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -12,8 +12,6 @@ import br.com.walletfy.entity.Conta;
 import br.com.walletfy.entity.Usuario;
 import br.com.walletfy.mapper.ContaMapper;
 import br.com.walletfy.repository.ContaRepository;
-import br.com.walletfy.repository.GastoRepository;
-import br.com.walletfy.repository.ReceitaRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -24,8 +22,6 @@ public class ContaService {
 	private final ContaMapper contaMapper;
 	private final UsuarioService usuarioService;
 	private final BancoService bancoService;
-	private final ReceitaRepository receitaRepository;
-	private final GastoRepository gastoRepository;
 	
 	public ContaResponseDTO cadastrar(Long usuarioId, ContaRequestDTO dto) {
 		Usuario usuario = this.usuarioService.getReference(usuarioId);
@@ -36,7 +32,6 @@ public class ContaService {
 					  .banco(banco)
 					  .nome(dto.getNome())
 					  .tipo(dto.getTipo())
-					  .icone(dto.getIcone())
 					  .saldoInicial(dto.getSaldoInicial())
 					  .ativo(true)
 					  .build();
@@ -45,6 +40,12 @@ public class ContaService {
 		
 		return contaMapper.toResponseDTO(conta);
 	}
+	
+	   public List<ContaResponseDTO> listar(Long usuarioId) {
+	        return contaRepository.listarContasUsuario(usuarioId).stream()
+	            .map(contaMapper::toResponseDTO)
+	            .toList();
+	    }
 	
 	
 }

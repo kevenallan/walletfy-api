@@ -7,6 +7,8 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import br.com.walletfy.enums.TipoConta;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -41,8 +43,8 @@ public class Conta {
 	private Banco banco;
 	
 	private String nome;
+	@Enumerated(EnumType.STRING)
 	private TipoConta tipo;
-	private String icone;
 	private BigDecimal saldoInicial;
 	private boolean ativo;
 	

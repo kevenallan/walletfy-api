@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import br.com.walletfy.entity.Banco;
-import br.com.walletfy.entity.Categoria;
 import br.com.walletfy.exception.RegraNegocioException;
 import br.com.walletfy.repository.BancoRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,4 +23,5 @@ public class BancoService {
 	public List<Banco> listar() {
 		return this.bancoRepository.findAll();
 	}
+	
 }

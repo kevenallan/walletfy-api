@@ -24,8 +24,8 @@ public class BancoController {
 		return ResponseEntity.ok(this.bancoService.listar());
 	}
 	
-	@GetMapping("/{id}")
+	@GetMapping("/{bancoId}")
 	public ResponseEntity<Banco> buscarPorId(@PathVariable Long bancoId) {
-		return ResponseEntity.ok(this.bancoService.buscarPorId(bancoId));
+		return ResponseEntity.ok(this.bancoService.getReference(bancoId));
 	}
 }

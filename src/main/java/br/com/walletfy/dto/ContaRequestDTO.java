@@ -13,7 +13,6 @@ import lombok.Setter;
 public class ContaRequestDTO {
 	private Long id;
 	
-	@NotNull
 	private Long bancoId;
 	
 	@NotBlank
@@ -24,7 +23,5 @@ public class ContaRequestDTO {
 	
 	@NotNull
 	private BigDecimal saldoInicial;
-	
-	@NotBlank
-	private String icone;
+
 }
