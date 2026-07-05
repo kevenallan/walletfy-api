@@ -21,6 +21,4 @@ public class ContaEdicaoRequestDTO {
 	@NotNull
 	private TipoConta tipo;
 	
-	@NotNull
-	private Boolean ativo;
 }

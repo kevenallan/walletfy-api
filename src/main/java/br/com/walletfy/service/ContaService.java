@@ -71,19 +71,21 @@ public class ContaService {
    
    public void atualizar(Long usuarioId, ContaEdicaoRequestDTO dto) {
 	   Conta conta = this.getReference(dto.getId());
-	   Banco banco = this.bancoService.getReference(dto.getBancoId());
+	   if (dto.getBancoId() != null) {
+		   Banco banco = this.bancoService.getReference(dto.getBancoId());
+		   conta.setBanco(banco); 
+	   }
 	   
 	   conta.setNome(dto.getNome());
 	   conta.setTipo(dto.getTipo());
-	   conta.setBanco(banco);
-	   conta.setAtivo(dto.getAtivo());
 	   
 	  this.contaRepository.save(conta);
    }
    
    public void deletar(Long contaId) {
 	   Conta conta = this.getReference(contaId);
-	   
-	   this.contaRepository.delete(conta);
+	   conta.setAtivo(false);
+	   this.contaRepository.save(conta);
    }
+
 }

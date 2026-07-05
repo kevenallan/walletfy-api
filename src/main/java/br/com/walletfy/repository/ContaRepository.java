@@ -46,4 +46,5 @@ public interface ContaRepository extends JpaRepository<Conta, Long>{
 			ORDER BY c.nome;
 	""", nativeQuery = true)
 	List<ContaListagemProjection> listarContasUsuario(@Param("usuarioId") Long usuarioId);
+//	AND c.ativo = true
 }

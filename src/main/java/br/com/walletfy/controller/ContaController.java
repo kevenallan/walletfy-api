@@ -56,7 +56,7 @@ public class ContaController {
         return ResponseEntity.noContent().build();
     }
     
-    @DeleteMapping
+    @DeleteMapping("/{contaId}")
     public ResponseEntity<Void> deletar(@PathVariable Long contaId) {
         this.contaService.deletar(contaId);
         return ResponseEntity.noContent().build();
