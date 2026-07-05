@@ -1,7 +1,5 @@
 package br.com.walletfy.dto;
 
-import java.math.BigDecimal;
-
 import br.com.walletfy.enums.TipoConta;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -10,7 +8,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ContaRequestDTO {	
+public class ContaEdicaoRequestDTO {
+
+	@NotNull
+	private Long id;
+	
 	private Long bancoId;
 	
 	@NotBlank
@@ -20,5 +22,5 @@ public class ContaRequestDTO {
 	private TipoConta tipo;
 	
 	@NotNull
-	private BigDecimal saldoInicial;
+	private Boolean ativo;
 }
