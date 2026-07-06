@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import br.com.walletfy.dto.ContaEdicaoRequestDTO;
 import br.com.walletfy.dto.ContaRequestDTO;
 import br.com.walletfy.dto.ContaResponseDTO;
+import br.com.walletfy.dto.ContaResumoResponseDTO;
 import br.com.walletfy.entity.Banco;
 import br.com.walletfy.entity.Conta;
 import br.com.walletfy.entity.Usuario;
@@ -67,6 +68,10 @@ public class ContaService {
 	   conta.setSaldoInicial(null);
 	   
 	   return contaMapper.toResponseDTO(conta);
+   }
+   
+   public ContaResumoResponseDTO getResumo(Long usuarioId) {
+	   return this.contaRepository.getResumo(usuarioId);
    }
    
    public void atualizar(Long usuarioId, ContaEdicaoRequestDTO dto) {

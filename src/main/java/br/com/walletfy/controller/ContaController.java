@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.walletfy.dto.ContaEdicaoRequestDTO;
 import br.com.walletfy.dto.ContaRequestDTO;
 import br.com.walletfy.dto.ContaResponseDTO;
+import br.com.walletfy.dto.ContaResumoResponseDTO;
 import br.com.walletfy.security.SecurityUtils;
 import br.com.walletfy.service.ContaService;
 import jakarta.validation.Valid;
@@ -48,6 +49,12 @@ public class ContaController {
     public ResponseEntity<ContaResponseDTO> detalhar(@PathVariable Long contaId) {
         return ResponseEntity.ok(
                 this.contaService.detalhar(contaId));
+    }
+    
+    @GetMapping("/resumo")
+    public ResponseEntity<ContaResumoResponseDTO> getResumo() {
+        return ResponseEntity.ok(
+                this.contaService.getResumo(this.usuarioId()));
     }
     
     @PutMapping
