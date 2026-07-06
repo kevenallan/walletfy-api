@@ -37,6 +37,9 @@ public class ContaService {
 			
 		}
 		
+//		VERIFICAR SE AO TENTAR CADASTRAR UMA CONTA COM OS MESMOS ATRIBUTOS DE UMA 
+//		QUE JA FOI INATIVADA, SETAR ELA COMO ATIVA E ZERAR O SALDO
+		
 		Conta conta = Conta.builder() 
 					  .usuario(usuario)
 					  .banco(banco)

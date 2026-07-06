@@ -44,10 +44,10 @@ public interface ContaRepository extends JpaRepository<Conta, Long>{
 			    GROUP BY conta_id
 			) g ON g.conta_id = c.id
 			WHERE c.usuario_id = :usuarioId
+			AND c.ativo = true
 			ORDER BY c.nome;
 	""", nativeQuery = true)
 	List<ContaListagemProjection> listarContasUsuario(@Param("usuarioId") Long usuarioId);
-//	AND c.ativo = true
 
 	@Query(value=""" 
 			WITH saldo_por_conta AS (
