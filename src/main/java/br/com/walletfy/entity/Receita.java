@@ -49,6 +49,10 @@ public class Receita {
 	@JoinColumn(name = "status_id")
 	private StatusReceita status;
 	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "conta_id")
+	private Conta conta;
+	
 	private String descricao;
 	
 	private BigDecimal valor;
