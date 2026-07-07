@@ -20,6 +20,8 @@ public class ReceitaRequestDTO {
 	@NotNull
 	private Long statusId;
 	
+	private Long contaId;
+	
 	@NotNull
 	private String descricao;
 	

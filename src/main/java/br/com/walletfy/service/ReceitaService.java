@@ -9,6 +9,7 @@ import br.com.walletfy.dto.ReceitaRequestDTO;
 import br.com.walletfy.dto.ReceitaResponseDTO;
 import br.com.walletfy.dto.ReceitaResumoResponseDTO;
 import br.com.walletfy.entity.Categoria;
+import br.com.walletfy.entity.Conta;
 import br.com.walletfy.entity.FormaPagamento;
 import br.com.walletfy.entity.Receita;
 import br.com.walletfy.entity.StatusReceita;
@@ -28,6 +29,7 @@ public class ReceitaService {
 	private final CategoriaService categoriaService;
 	private final FormaPagamentoService formaPagamentoService;
 	private final StatusReceitaService statusReceitaService;
+	private final ContaService contaService;
 	
 	public ReceitaResponseDTO cadastrar(Long usuarioId, ReceitaRequestDTO dto) {
 		Usuario usuario = this.usuarioService.getReference(usuarioId);
@@ -35,11 +37,17 @@ public class ReceitaService {
 		StatusReceita status = this.statusReceitaService.getReference(dto.getStatusId());
 		FormaPagamento formaPagamento = this.formaPagamentoService.getReference(dto.getFormaPagamentoId());
 		
+		Conta conta = null;
+		if(dto.getContaId() != null) {
+			conta = this.contaService.getReference(dto.getContaId());
+		}
+		
 		Receita receita = Receita.builder()
 				.usuario(usuario)
 				.categoria(categoria)
 				.formaPagamento(formaPagamento)
 				.status(status)
+				.conta(conta)
 				.descricao(dto.getDescricao())
 				.valor(dto.getValor())
 				.dataReceita(dto.getDataReceita())
@@ -68,6 +76,7 @@ public class ReceitaService {
 		if(dto.getId() == null) {
 			throw new RegraNegocioException("Receita inválida");
 		}
+		
 		Receita receita = this.receitaRepository.findById(dto.getId()).orElseThrow(() -> new RegraNegocioException("Receita não encontrada"));
 		Usuario usuario = this.usuarioService.getReference(usuarioId);
 		if (receita.getUsuario().getId() != usuario.getId()) {
@@ -77,10 +86,16 @@ public class ReceitaService {
 		Categoria categoria = this.categoriaService.getReference(dto.getCategoriaId());
 		StatusReceita status = this.statusReceitaService.getReference(dto.getStatusId());
 		FormaPagamento formaPagamento = this.formaPagamentoService.getReference(dto.getFormaPagamentoId());
+		
+		Conta conta = null;
+		if(dto.getContaId() != null) {
+			conta = this.contaService.getReference(dto.getContaId());
+		}
 
 		receita.setCategoria(categoria);
 		receita.setFormaPagamento(formaPagamento);
 		receita.setStatus(status);
+		receita.setConta(conta);
 		receita.setDescricao(dto.getDescricao());
 		receita.setValor(dto.getValor());
 		receita.setDataReceita(dto.getDataReceita());
