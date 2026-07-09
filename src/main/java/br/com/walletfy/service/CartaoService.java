@@ -47,8 +47,6 @@ public class CartaoService {
 	}
 	
 	public List<CartaoResponseDTO> listar(Long usuarioId) {
-		Usuario usuario = this.usuarioService.getReference(usuarioId);
-		
-		return this.cartaoRepository.findByUsuarioAndAtivo(usuario, true).stream().map(cartaoMapper::toResponseDTO).toList();
+		return this.cartaoRepository.listarCartoes(usuarioId).stream().map(cartaoMapper::toResponseDTO).toList();
 	}
 }
